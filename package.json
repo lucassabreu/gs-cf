@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bootstrap": "4.0.0-beta",
+    "googleapis": "^22.2.0",
     "inferno": "^3.9.0",
     "inferno-component": "^3.9.0",
+    "inferno-create-class": "^3.9.0",
     "inferno-router": "^3.9.0",
-    "inferno-scripts": "4.2.0"
+    "inferno-scripts": "4.2.0",
+    "jquery": "^3.2.1"
   },
   "scripts": {
     "start": "inferno-scripts start",
