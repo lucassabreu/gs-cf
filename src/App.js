@@ -1,7 +1,8 @@
 import Component from 'inferno-component';
-import { IndexLink, Link } from 'inferno-router';
+import { IndexLink } from 'inferno-router';
 import './App.css';
 import GoogleAPIService from './GoogleAPIService';
+import LoadSheetForm from './LoadSheetForm';
 
 class App extends Component {
   constructor(props, { router }) {
@@ -19,17 +20,14 @@ class App extends Component {
     var menu = null;
     if (this.state.router.url !== "/login") {
       menu = (
-        <ul className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to="/other/thing" className="nav-link" href="#">Other (thing)</Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/other/time" className="nav-link" href="#">Other (time)</Link>
-          </li>
-          <li className="nav-item">
-            <span className="nav-link" onClick={this.signOut}>Sign out</span>
-          </li>
-        </ul>
+        <div className="collapse navbar-collapse" id="navbars">
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <span className="btn nav-link" onClick={this.signOut}>Logout</span>
+            </li>
+          </ul>
+          <LoadSheetForm router={this.state.router} />
+        </div>
       );
     }
 
@@ -42,7 +40,7 @@ class App extends Component {
             <span className="navbar-toggler-icon"></span>
           </button>
 
-          <div className="collapse navbar-collapse" id="navbars">{menu}</div>
+          {menu}
         </nav>
 
         <div className="container-fluid">
