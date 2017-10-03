@@ -26,7 +26,7 @@ class App extends Component {
               <span className="btn nav-link" onClick={this.signOut}>Logout</span>
             </li>
           </ul>
-          <LoadSheetForm router={this.state.router} />
+          <LoadSheetForm params={this.props.params} router={this.state.router} />
         </div>
       );
     }
