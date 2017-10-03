@@ -1,5 +1,7 @@
 /* global gapi */
 
+import Moviment from './Moviment';
+
 const PARAMS = {
   apiKey: 'AIzaSyCZ5_w5a91cUJVYStFGouS4ffbVgzkBk_E',
   clientId: '723341089127-thkukv2q6u8vfithe30h1qciemdhasae.apps.googleusercontent.com',
@@ -8,20 +10,22 @@ const PARAMS = {
 };
 
 class GoogleAPIService {
-  initGoogleAPI() {
-    return new Promise((f, r) => {
-      if (window.gapi) {
-        return f();
-      }
 
-      const script = document.createElement("script");
-      script.src = "//apis.google.com/js/api.js";
-      script.onload = () => {
-        gapi.load('client:auth2', () => gapi.client.init(PARAMS).then(f))
-      }
+  getSheetData(id) {
+    return this.initGoogleAPI()
+      .then(() => {
+        return new Promise((f, r) => {
+          gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: id,
+            range: `'Movimentação'!A:E`,
+          }).then(f, r)
+        })
+      }).then((data) => this.convertArrayToMoviment(data));
+  }
 
-      document.body.append(script);
-    });
+  convertArrayToMoviment(data) {
+    var moviments = data.result.values.slice(1)
+    return moviments.map((array) => new Moviment(...array))
   }
 
   listenOnIsSignedIn(cb) {
@@ -40,6 +44,22 @@ class GoogleAPIService {
   signOut() {
     return this.initGoogleAPI()
       .then(() => gapi.auth2.getAuthInstance().signOut());
+  }
+
+  initGoogleAPI() {
+    return new Promise((f, r) => {
+      if (window.gapi) {
+        return f();
+      }
+
+      const script = document.createElement("script");
+      script.src = "//apis.google.com/js/api.js";
+      script.onload = () => {
+        gapi.load('client:auth2', () => gapi.client.init(PARAMS).then(f))
+      }
+
+      document.body.append(script);
+    });
   }
 }
 
