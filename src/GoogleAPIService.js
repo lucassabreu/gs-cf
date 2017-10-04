@@ -5,8 +5,14 @@ import Moviment from './Moviment';
 const PARAMS = {
   apiKey: 'AIzaSyCZ5_w5a91cUJVYStFGouS4ffbVgzkBk_E',
   clientId: '723341089127-thkukv2q6u8vfithe30h1qciemdhasae.apps.googleusercontent.com',
-  discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-  scope: 'https://www.googleapis.com/auth/spreadsheets.readonly',
+  discoveryDocs: [
+    'https://sheets.googleapis.com/$discovery/rest?version=v4',
+    'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+  ],
+  scope: [
+    'https://www.googleapis.com/auth/spreadsheets.readonly',
+    'https://www.googleapis.com/auth/drive.metadata.readonly',
+  ].join(' '),
 };
 
 class GoogleAPIService {
@@ -28,6 +34,21 @@ class GoogleAPIService {
     return moviments.map((array) => new Moviment(...array))
   }
 
+  listFiles(nextPageToken) {
+    return this.initGoogleDriveAPI()
+      .then(() => {
+        return new Promise((f, r) => {
+          gapi.client.drive.files.list({
+            nextPageToken: nextPageToken,
+            q: `mimeType = 'application/vnd.google-apps.spreadsheet' and trashed = false`,
+            fields: 'nextPageToken, files(id, name, parents)',
+          })
+            .then(f, r);
+        });
+      })
+      .then((response) => response.result);
+  }
+
   listenOnIsSignedIn(cb) {
     this.initGoogleAPI().then(() => {
       const oauth = gapi.auth2.getAuthInstance();
@@ -46,6 +67,11 @@ class GoogleAPIService {
       .then(() => gapi.auth2.getAuthInstance().signOut());
   }
 
+  initGoogleDriveAPI() {
+    return this.initGoogleAPI()
+      .then(() => new Promise((f, r) => gapi.client.load('drive', 'v3').then(f, r)));
+  }
+
   initGoogleAPI() {
     return new Promise((f, r) => {
       if (window.gapi) {
@@ -54,10 +80,7 @@ class GoogleAPIService {
 
       const script = document.createElement("script");
       script.src = "//apis.google.com/js/api.js";
-      script.onload = () => {
-        gapi.load('client:auth2', () => gapi.client.init(PARAMS).then(f))
-      }
-
+      script.onload = () => gapi.load('client:auth2', () => gapi.client.init(PARAMS).then(f, r))
       document.body.append(script);
     });
   }

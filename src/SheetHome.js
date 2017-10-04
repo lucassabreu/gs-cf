@@ -8,22 +8,30 @@ class SheetHome extends Component {
     this.state = {
       router: router,
       sheetId: props.params.id,
+      error: null,
     };
 
     this.onGetSheetValues = this.onGetSheetValues.bind(this);
+    this.onError = this.onError.bind(this);
+  }
+
+  onError(error) {
+    this.setState({
+      error: error,
+    });
   }
 
   componentWillMount() {
     GoogleAPIService.getSheetData(this.state.sheetId)
       .then(this.onGetSheetValues)
-      .catch(console.error);
+      .catch(this.onError);
   }
 
   onGetSheetValues(data) {
     console.log(data)
   }
 
-  render () {
+  render() {
     return <div>{this.state.sheetId}</div>
   }
 }

@@ -44,8 +44,8 @@ class App extends Component {
         </nav>
 
         <div className="container-fluid">
-          <div className="row">
-            <main className="col-sm-9 ml-sm-auto col-md-10 pt-3" role="main">
+          <div className="row justify-content-md-center">
+            <main className="col-sm-10 pt-3" role="main">
               <section className="row text-center placeholders">
                 {this.props.children}
               </section>
