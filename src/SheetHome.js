@@ -1,5 +1,7 @@
 import Component from 'inferno-component';
 import GoogleAPIService from './GoogleAPIService';
+import formatMoney from './formatMoney';
+import './SheetHome.css'
 
 class SheetHome extends Component {
   constructor(props, { router }) {
@@ -9,6 +11,7 @@ class SheetHome extends Component {
       router: router,
       sheetId: props.params.id,
       error: null,
+      data: [],
     };
 
     this.onGetSheetValues = this.onGetSheetValues.bind(this);
@@ -28,11 +31,36 @@ class SheetHome extends Component {
   }
 
   onGetSheetValues(data) {
-    console.log(data)
+    this.setState({
+      data: data,
+    })
   }
 
   render() {
-    return <div>{this.state.sheetId}</div>
+    const movimentToLine = (m) => {
+      return <tr>
+        <td>{m.date}</td>
+        <td>{m.category}</td>
+        <td>{m.description}</td>
+        <td style="text-align: right;">{formatMoney(m.value, 2, ',', '.')}</td>
+        <td>{m.origin}</td>
+      </tr>
+    }
+
+    return (
+      <table class="table table-sm">
+        <thead>
+          <th>Data</th>
+          <th>Categoria</th>
+          <th>Descrição</th>
+          <th style="text-align: right;">Valor</th>
+          <th>Origem</th>
+        </thead>
+        <tbody>
+          {this.state.data.map(movimentToLine)}
+        </tbody>
+      </table>
+    )
   }
 }
 
