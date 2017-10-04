@@ -45,7 +45,7 @@ class Home extends Component {
     }
 
     return (
-      <div>
+      <div className="col-12">
         {this.state.files.map((f) => {
           return <div><Link to={'/sheet/' + f.id}>{f.name}</Link></div>
         })}

@@ -42,7 +42,7 @@ class SheetHome extends Component {
         <td>{m.date}</td>
         <td>{m.category}</td>
         <td>{m.description}</td>
-        <td style="text-align: right;">{formatMoney(m.value, 2, ',', '.')}</td>
+        <td className="text-right">{formatMoney(m.value, 2, ',', '.')}</td>
         <td>{m.origin}</td>
       </tr>
     }
@@ -53,7 +53,7 @@ class SheetHome extends Component {
           <th>Data</th>
           <th>Categoria</th>
           <th>Descrição</th>
-          <th style="text-align: right;">Valor</th>
+          <th className="text-right">Valor</th>
           <th>Origem</th>
         </thead>
         <tbody>
