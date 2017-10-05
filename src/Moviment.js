@@ -9,8 +9,17 @@ class Moviment {
     this.date = date;
     this.category = category;
     this.description = description;
-    this.value = parseFloat(value.trim().split(' ').slice(-1)[0]);
+    this.value = value;
     this.origin = origin;
+  }
+
+  getMonth() {
+    return new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+  }
+
+  getMonthString() {
+    const m = this.date.getMonth();
+    return this.date.getFullYear() + '-' + (m > 9 ? m : '0' + m);
   }
 }
 

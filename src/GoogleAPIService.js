@@ -31,7 +31,14 @@ class GoogleAPIService {
 
   convertArrayToMoviment(data) {
     var moviments = data.result.values.slice(1)
-    return moviments.map((array) => new Moviment(...array))
+    return moviments
+      .map((array) => {
+        const date = array[0].split('/');
+        array[0] = new Date(date[2], (date[1] - 1), date[0]);
+        array[3] = parseFloat(array[3].trim().split(' ').slice(-1)[0])
+        return array;
+      })
+      .map((array) => new Moviment(...array))
   }
 
   listFiles(nextPageToken) {
