@@ -35,7 +35,7 @@ class GoogleAPIService {
       .map((array) => {
         const date = array[0].split('/');
         array[0] = new Date(date[2], (date[1] - 1), date[0]);
-        array[3] = parseFloat(array[3].trim().split(' ').slice(-1)[0])
+        array[3] = (array[3][0] === '-' ? -1 : 1) * parseFloat(array[3].trim().split(' ').slice(-1)[0])
         return array;
       })
       .map((array) => new Moviment(...array))

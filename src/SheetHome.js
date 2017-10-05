@@ -1,6 +1,6 @@
 import Component from 'inferno-component';
 import GoogleAPIService from './GoogleAPIService';
-// import MonthlyTable from './Sheet/MonthlyTable.js';
+import MonthlyTable from './Sheet/MonthlyTable.js';
 import './SheetHome.css'
 
 class SheetHome extends Component {
@@ -41,15 +41,21 @@ class SheetHome extends Component {
   reduceToMonth(moviments) {
     const monthHash = moviments.reduce(
       (r, c) => {
-        var key = c.getMonthString();
+        var key = parseInt(c.getMonthString().replace(/-/, ''), 10);
         if (r[key] === undefined) {
           r[key] = {
             month: c.getMonth(),
+            key: key,
             balance: 0,
+            credit: 0,
+            debit: 0,
+            moviments: [],
           }
         }
 
+        r[key][c.value < 0 ? 'debit' : 'credit'] += c.value;
         r[key].balance += c.value;
+        r[key].moviments.push(c)
 
         return r
       },
@@ -58,28 +64,24 @@ class SheetHome extends Component {
 
     var months = [];
     for (var key in monthHash) {
-      var month = monthHash[key];
-      months.push(month);
+      months.push(monthHash[key]);
     }
-    months = months.sort((p, n) => new Date(n.month) - new Date(p.month))
-    window.m = months;
-    return months;
+
+    months = months.sort((n, p) => n.key - p.key)
+
+    for (key in months) {
+      var m = months[key];
+      var prev = months[key - 1];
+      m.initial = prev ? prev.final : 0;
+      m.final = m.initial + m.balance;
+    }
+
+    return months
   }
 
   render() {
-    var months = this.state.months
-    months = months.sort((p, n) => n.month.getTime() < p.month.getTime())
-    console.log(months[0]);
-    console.log(months[1]);
-    console.log(months[2]);
-
     return (
-      // {/* <div className="col-6">
-      //   <MonthlyTable loading={this.state.loading} months={this.state.months} />
-      // </div> */}
-      <ul>
-        {months.map(m => m.month).map(m => <li>{m.toDateString()}</li>)}
-      </ul>
+      <MonthlyTable loading={this.state.loading} months={this.state.months} />
     )
   }
 }
