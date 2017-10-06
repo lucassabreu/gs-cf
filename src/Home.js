@@ -45,10 +45,12 @@ class Home extends Component {
     }
 
     return (
-      <div className="col-12">
-        {this.state.files.map((f) => {
-          return <div><Link to={'/sheet/' + f.id}>{f.name}</Link></div>
-        })}
+      <div className="card col-12">
+        <ul className="list-group list-group-flush">
+          {this.state.files.map((f) => {
+            return <li class="list-group-item"><Link to={'/sheet/' + f.id}>{f.name}</Link></li>
+          })}
+        </ul>
       </div>
     );
   }

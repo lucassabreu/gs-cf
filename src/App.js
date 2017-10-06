@@ -46,7 +46,7 @@ class App extends Component {
         <div className="container-fluid">
           <div className="row justify-content-center">
             <main className="col-10 pt-3" role="main">
-              <section className="row text-center placeholders">
+              <section className="row">
                 {this.props.children}
               </section>
             </main>

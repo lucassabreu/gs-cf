@@ -72,6 +72,7 @@ class SheetHome extends Component {
     for (key in months) {
       var m = months[key];
       var prev = months[key - 1];
+      m.prev = prev;
       m.initial = prev ? prev.final : 0;
       m.final = m.initial + m.balance;
     }
@@ -81,7 +82,29 @@ class SheetHome extends Component {
 
   render() {
     return (
-      <MonthlyTable loading={this.state.loading} months={this.state.months} />
+      <div className="card col-12">
+        <ul class="nav nav-pills card-body" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="monthly-table-tab" data-toggle="tab" href="#monthly-table" role="tab"
+              aria-controls="monthly-table" aria-expanded="true">
+              Saldo Mensal
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="other">
+              Other
+              </a>
+          </li>
+        </ul>
+          <div className="card-body tab-content">
+            <div class="tab-pane fade show active" id="monthly-table" role="tabpanel" aria-labelledby="monthly-table-tab">
+              <MonthlyTable loading={this.state.loading} months={this.state.months} />
+            </div>
+            <div class="tab-pane fade show active" id="other" role="tabpanel" aria-labelledby="other-tab">
+              others
+          </div>
+        </div>
+      </div>
     )
   }
 }

@@ -1,25 +1,29 @@
 import formatMoney from './formatMoney';
 import formatDate from './formatDate';
+import './MonthlyTable.css'
 
 export default function MonthlyTable({ className, loading, months }) {
   return (
     loading ? <div>Loading...</div> :
-      <table className={className + " table table-sm"}>
+      <table className={className + " monthlyTable table"}>
         <thead>
           <th>Month</th>
           <th className="text-right">Initial</th>
           <th className="text-right">Credit</th>
           <th className="text-right">Debit</th>
+          <th className="text-right">Balance</th>
           <th className="text-right">Final</th>
         </thead>
         <tbody>
           {months.map((m) => {
+            const lineColor = m.balance > 0 ? 'lineGreen' : 'lineRed';
             return (
-              <tr>
+              <tr className={lineColor}>
                 <td>{formatDate(m.month)}</td>
                 <td className="text-right">{formatMoney(m.initial, 2, ',', '.')}</td>
                 <td className="text-right">{formatMoney(m.credit, 2, ',', '.')}</td>
                 <td className="text-right">{formatMoney(m.debit, 2, ',', '.')}</td>
+                <td className="text-right">{formatMoney(m.balance, 2, ',', '.')}</td>
                 <td className="text-right">{formatMoney(m.final, 2, ',', '.')}</td>
               </tr>
             )
