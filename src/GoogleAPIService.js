@@ -23,7 +23,7 @@ class GoogleAPIService {
         return new Promise((f, r) => {
           gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: id,
-            range: `'Movimentação'!A:E`,
+            range: `A:E`,
           }).then(f, r)
         })
       }).then((data) => this.convertArrayToMoviment(data));

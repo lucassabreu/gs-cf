@@ -1,8 +1,10 @@
 import Component from 'inferno-component';
 import { IndexLink } from 'inferno-router';
-import './App.css';
 import GoogleAPIService from './GoogleAPIService';
 import LoadSheetForm from './LoadSheetForm';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import './App.css';
 
 class App extends Component {
   constructor(props, { router }) {

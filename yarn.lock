@@ -1046,6 +1046,10 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
+bootstrap@^4.0.0-beta:
+  version "4.0.0-beta"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.tgz#dc5928175d2e71310bc668cf9e05a907211b72a6"
+
 boxen@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/boxen/-/boxen-0.6.0.tgz#8364d4248ac34ff0ef1b2f2bf49a6c60ce0d81b6"
@@ -1336,6 +1340,10 @@ clap@^1.0.9:
   resolved "https://registry.yarnpkg.com/clap/-/clap-1.2.3.tgz#4f36745b32008492557f46412d66d50cb99bce51"
   dependencies:
     chalk "^1.1.3"
+
+classnames@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
 clean-css@4.1.x:
   version "4.1.9"
@@ -3163,7 +3171,26 @@ indexof@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz#82dc336d232b9062179d05ab3293a66059fd435d"
 
-inferno-component@3.9.0, inferno-component@^3.7.0, inferno-component@^3.9.0:
+inferno-animation@^0.4.4:
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/inferno-animation/-/inferno-animation-0.4.5.tgz#1d60f62530aefffcb8e2722a44d88ab4ed0e55af"
+  dependencies:
+    inferno "^3"
+    inferno-component "^3.6.4"
+    inferno-create-element "^3.6.4"
+
+inferno-bootstrap@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/inferno-bootstrap/-/inferno-bootstrap-0.2.4.tgz#fe07ee5b6409f119ed25279fd4eb3fe631792d66"
+  dependencies:
+    classnames "^2.2.5"
+    inferno-animation "^0.4.4"
+    inferno-popper "^0.1.9"
+    lodash.isfunction "^3.0.8"
+    lodash.isobject "^3.0.2"
+    lodash.tonumber "^4.0.3"
+
+inferno-component@3.9.0, inferno-component@^3.6.4, inferno-component@^3.7.0, inferno-component@^3.9.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/inferno-component/-/inferno-component-3.9.0.tgz#26a653bd9f055df49116facf54321ece990798f8"
   dependencies:
@@ -3178,7 +3205,7 @@ inferno-create-class@^3.9.0:
     inferno-component "3.9.0"
     inferno-shared "3.9.0"
 
-inferno-create-element@3.9.0:
+inferno-create-element@3.9.0, inferno-create-element@^3.6.4:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/inferno-create-element/-/inferno-create-element-3.9.0.tgz#7b7a15a2b3f9ae57e353b29640e01cc6e1abce7d"
   dependencies:
@@ -3220,6 +3247,14 @@ inferno-error-overlay@^2.2.0:
     inferno-dev-utils "^3.2.0"
     settle-promise "1.0.0"
     source-map "0.5.6"
+
+inferno-popper@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/inferno-popper/-/inferno-popper-0.1.9.tgz#7f258742b7b63efa7824d695d85a388fe0d354bc"
+  dependencies:
+    classnames "^2.2.5"
+    is-equal-shallow "^0.1.3"
+    popper.js "^1.10.8"
 
 inferno-router@^3.9.0:
   version "3.9.0"
@@ -3296,7 +3331,7 @@ inferno-vnode-flags@3.9.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/inferno-vnode-flags/-/inferno-vnode-flags-3.9.0.tgz#8e358803b8c396788070d54786d86894cecd4a46"
 
-inferno@3.9.0, inferno@^3.7.0, inferno@^3.9.0:
+inferno@3.9.0, inferno@^3, inferno@^3.7.0, inferno@^3.9.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/inferno/-/inferno-3.9.0.tgz#4e9a312e9929abb741dfe285630841b0d7e95e62"
   dependencies:
@@ -4139,6 +4174,14 @@ lodash.defaults@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
 
+lodash.isfunction@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.isfunction/-/lodash.isfunction-3.0.8.tgz#4db709fc81bc4a8fd7127a458a5346c5cdce2c6b"
+
+lodash.isobject@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/lodash.isobject/-/lodash.isobject-3.0.2.tgz#3c8fb8d5b5bf4bf90ae06e14f2a530a4ed935e1d"
+
 lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
@@ -4159,6 +4202,10 @@ lodash.templatesettings@^4.0.0:
   resolved "https://registry.yarnpkg.com/lodash.templatesettings/-/lodash.templatesettings-4.1.0.tgz#2b4d4e95ba440d915ff08bc899e4553666713316"
   dependencies:
     lodash._reinterpolate "~3.0.0"
+
+lodash.tonumber@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/lodash.tonumber/-/lodash.tonumber-4.0.3.tgz#0b96b31b35672793eb7f5a63ee791f1b9e9025d9"
 
 lodash.uniq@^4.5.0:
   version "4.5.0"
@@ -4855,6 +4902,10 @@ pluralize@^4.0.0:
 pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
+
+popper.js@^1.10.8:
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.5.tgz#229e4dea01629e1f1a1e26991ffade5024220fa6"
 
 portfinder@^1.0.9:
   version "1.0.13"

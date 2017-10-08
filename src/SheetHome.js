@@ -2,6 +2,12 @@ import Component from 'inferno-component';
 import GoogleAPIService from './GoogleAPIService';
 import MonthlyTable from './Sheet/MonthlyTable.js';
 import './SheetHome.css'
+import Nav from 'inferno-bootstrap/dist/Navigation/Nav';
+import NavItem from 'inferno-bootstrap/dist/Navigation/NavItem';
+import NavLink from 'inferno-bootstrap/dist/Navigation/NavLink';
+import TabContent from 'inferno-bootstrap/dist/TabContent';
+import TabPane from 'inferno-bootstrap/dist/TabPane';
+import classnames from 'classnames';
 
 class SheetHome extends Component {
   constructor(props, { router }) {
@@ -14,6 +20,7 @@ class SheetHome extends Component {
       loading: true,
       data: [],
       months: [],
+      activeTab: 'monthly-table',
     };
 
     this.onGetSheetValues = this.onGetSheetValues.bind(this);
@@ -80,30 +87,37 @@ class SheetHome extends Component {
     return months
   }
 
+  toogleTab(tabId) {
+    this.setState({
+      activeTab: tabId,
+    })
+  }
+
   render() {
     return (
       <div className="card col-12">
-        <ul class="nav nav-pills card-body" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="monthly-table-tab" data-toggle="tab" href="#monthly-table" role="tab"
-              aria-controls="monthly-table" aria-expanded="true">
+        <Nav pills className="card-body">
+          <NavItem>
+            <NavLink className={classnames({ active: this.state.activeTab === 'monthly-table' })}
+              onClick={() => this.toogleTab('monthly-table')}>
               Saldo Mensal
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="other">
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink className={classnames({ active: this.state.activeTab === 'other' })}
+              onClick={() => this.toogleTab('other')}>
               Other
-              </a>
-          </li>
-        </ul>
-          <div className="card-body tab-content">
-            <div class="tab-pane fade show active" id="monthly-table" role="tabpanel" aria-labelledby="monthly-table-tab">
-              <MonthlyTable loading={this.state.loading} months={this.state.months} />
-            </div>
-            <div class="tab-pane fade show active" id="other" role="tabpanel" aria-labelledby="other-tab">
-              others
-          </div>
-        </div>
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent fade activeTab={this.state.activeTab}>
+          <TabPane tabId="monthly-table">
+            <MonthlyTable loading={this.state.loading} months={this.state.months} />
+          </TabPane>
+          <TabPane tabId="other">
+            others
+          </TabPane>
+        </TabContent>
       </div>
     )
   }
