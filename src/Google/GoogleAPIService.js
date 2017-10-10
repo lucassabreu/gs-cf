@@ -17,6 +17,8 @@ const PARAMS = {
 
 class GoogleAPIService {
 
+  
+
   async getSheetData(id) {
     await this.initGoogleAPI();
 
