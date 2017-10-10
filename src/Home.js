@@ -1,6 +1,7 @@
 import Component from 'inferno-component';
 import { Link } from 'inferno-router';
 import GoogleAPIService from './GoogleAPIService';
+import Loading from './Loading';
 
 class Home extends Component {
 
@@ -13,24 +14,23 @@ class Home extends Component {
     }
   }
 
-  loadNextPage(nextPageToken) {
-    GoogleAPIService.listFiles(nextPageToken)
-      .then(({ files, nextPageToken }) => {
-        this.setState({
-          loading: false,
-          files: this.state.files.concat(files),
-        });
-        if (nextPageToken) {
-          this.loadNextPage(nextPageToken)
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        this.setState({
-          loading: false,
-          files: [],
-        })
+  async loadNextPage(pageToken) {
+    try {
+      const { files, nextPageToken } = await GoogleAPIService.listFiles(pageToken);
+      this.setState({
+        loading: false,
+        files: this.state.files.concat(files),
       });
+      if (nextPageToken) {
+        this.loadNextPage(nextPageToken)
+      }
+    } catch (e) {
+      console.error(e);
+      this.setState({
+        loading: false,
+        files: [],
+      })
+    }
   }
 
   componentWillMount() {
@@ -40,19 +40,17 @@ class Home extends Component {
   }
 
   render() {
-    if (this.state.loading) {
-      return <div>Loading...</div>;
-    }
-
     return (
-      <div className="card col-12">
-        <ul className="list-group list-group-flush">
-          {this.state.files.map((f) => {
-            return <li class="list-group-item"><Link to={'/sheet/' + f.id}>{f.name}</Link></li>
-          })}
-        </ul>
-      </div>
-    );
+      <Loading loading={this.state.loading}>
+        <div className="card col-12">
+          <ul className="list-group list-group-flush">
+            {this.state.files.map((f) => {
+              return <li class="list-group-item"><Link to={'/sheet/' + f.id}>{f.name}</Link></li>
+            })}
+          </ul>
+        </div>
+      </Loading>
+    )
   }
 }
 

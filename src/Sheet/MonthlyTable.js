@@ -1,10 +1,11 @@
 import formatMoney from './formatMoney';
 import formatDate from './formatDate';
+import Loading from '../Loading';
 import './MonthlyTable.css'
 
 export default function MonthlyTable({ className, loading, months }) {
   return (
-    loading ? <div>Loading...</div> :
+    <Loading loading={loading}>
       <table className={className + " monthlyTable table"}>
         <thead>
           <th>Month</th>
@@ -30,5 +31,6 @@ export default function MonthlyTable({ className, loading, months }) {
           })}
         </tbody>
       </table>
+    </Loading>
   );
 }

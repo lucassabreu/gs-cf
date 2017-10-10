@@ -17,16 +17,15 @@ const PARAMS = {
 
 class GoogleAPIService {
 
-  getSheetData(id) {
-    return this.initGoogleAPI()
-      .then(() => {
-        return new Promise((f, r) => {
-          gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: id,
-            range: `A:E`,
-          }).then(f, r)
-        })
-      }).then((data) => this.convertArrayToMoviment(data));
+  async getSheetData(id) {
+    await this.initGoogleAPI();
+
+    const data = await this.promisify(gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: id,
+      range: `A:E`,
+    }));
+
+    return this.convertArrayToMoviment(data);
   }
 
   convertArrayToMoviment(data) {
@@ -41,42 +40,43 @@ class GoogleAPIService {
       .map((array) => new Moviment(...array))
   }
 
-  listFiles(nextPageToken) {
-    return this.initGoogleDriveAPI()
-      .then(() => {
-        return new Promise((f, r) => {
-          gapi.client.drive.files.list({
-            nextPageToken: nextPageToken,
-            q: `mimeType = 'application/vnd.google-apps.spreadsheet' and trashed = false`,
-            fields: 'nextPageToken, files(id, name, parents)',
-          })
-            .then(f, r);
-        });
-      })
-      .then((response) => response.result);
+  async listFiles(nextPageToken) {
+    await this.initGoogleDriveAPI()
+
+    const response = await this.promisify(gapi.client.drive.files.list({
+      nextPageToken: nextPageToken,
+      q: `mimeType = 'application/vnd.google-apps.spreadsheet' and trashed = false`,
+      fields: 'nextPageToken, files(id, name, parents)',
+    }));
+
+    return response.result;
   }
 
-  listenOnIsSignedIn(cb) {
-    this.initGoogleAPI().then(() => {
-      const oauth = gapi.auth2.getAuthInstance();
-      oauth.isSignedIn.listen(cb)
-      cb(oauth.isSignedIn.get())
-    });
+  async listenOnIsSignedIn(cb) {
+    await this.initGoogleAPI();
+
+    const oauth = gapi.auth2.getAuthInstance();
+    oauth.isSignedIn.listen(cb)
+    cb(oauth.isSignedIn.get())
   }
 
-  signIn() {
-    return this.initGoogleAPI()
-      .then(() => gapi.auth2.getAuthInstance().signIn());
+  async signIn() {
+    await this.initGoogleAPI();
+    gapi.auth2.getAuthInstance().signIn();
   }
 
-  signOut() {
-    return this.initGoogleAPI()
-      .then(() => gapi.auth2.getAuthInstance().signOut());
+  async signOut() {
+    await this.initGoogleAPI();
+    gapi.auth2.getAuthInstance().signOut();
   }
 
-  initGoogleDriveAPI() {
-    return this.initGoogleAPI()
-      .then(() => new Promise((f, r) => gapi.client.load('drive', 'v3').then(f, r)));
+  async initGoogleDriveAPI() {
+    await this.initGoogleAPI();
+    await this.promisify(gapi.client.load('drive', 'v3'));
+  }
+
+  promisify(gp) {
+    return new Promise((f, r) => gp.then(f, r))
   }
 
   initGoogleAPI() {
@@ -87,8 +87,8 @@ class GoogleAPIService {
 
       const script = document.createElement("script");
       script.src = "//apis.google.com/js/api.js";
-      script.onload = () => gapi.load('client:auth2', () => gapi.client.init(PARAMS).then(f, r))
       document.body.append(script);
+      script.onload = () => gapi.load('client:auth2', () => gapi.client.init(PARAMS).then(f, r))
     });
   }
 }

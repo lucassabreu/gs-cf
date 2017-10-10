@@ -7,6 +7,7 @@ import NavItem from 'inferno-bootstrap/dist/Navigation/NavItem';
 import NavLink from 'inferno-bootstrap/dist/Navigation/NavLink';
 import TabContent from 'inferno-bootstrap/dist/TabContent';
 import TabPane from 'inferno-bootstrap/dist/TabPane';
+import Loading from './Loading';
 import classnames from 'classnames';
 
 class SheetHome extends Component {
@@ -27,10 +28,15 @@ class SheetHome extends Component {
     this.onError = this.onError.bind(this);
   }
 
-  componentWillMount() {
-    GoogleAPIService.getSheetData(this.state.sheetId)
-      .then(this.onGetSheetValues)
-      .catch(this.onError);
+  async componentWillMount() {
+    try {
+      this.onGetSheetValues(
+        await GoogleAPIService.getSheetData(this.state.sheetId)
+      )
+    } catch (e) {
+      this.onError(e)
+
+    }
   }
 
   onError(error) {
@@ -110,12 +116,12 @@ class SheetHome extends Component {
             </NavLink>
           </NavItem>
         </Nav>
-        <TabContent fade activeTab={this.state.activeTab}>
+        <TabContent className="card-body" fade activeTab={this.state.activeTab}>
           <TabPane tabId="monthly-table">
             <MonthlyTable loading={this.state.loading} months={this.state.months} />
           </TabPane>
           <TabPane tabId="other">
-            others
+            <Loading loading />
           </TabPane>
         </TabContent>
       </div>
