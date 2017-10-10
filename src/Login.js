@@ -1,5 +1,5 @@
 import Component from 'inferno-component';
-import GoogleAPIService from './GoogleAPIService';
+import GoogleAPIService from './Google/GoogleAPIService';
 
 class Login extends Component {
   constructor(props, { router }) {

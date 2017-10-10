@@ -1,6 +1,6 @@
 import Component from 'inferno-component';
 import { Link } from 'inferno-router';
-import GoogleAPIService from './GoogleAPIService';
+import GoogleAPIService from './Google/GoogleAPIService';
 import Loading from './Loading';
 
 class Home extends Component {

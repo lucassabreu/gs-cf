@@ -1,5 +1,6 @@
 import Component from 'inferno-component';
-import GoogleAPIService from './GoogleAPIService';
+import SheetAPIService from './Google/SheetAPIService';
+import MovementService from './Model/MovementService';
 import MonthlyTable from './Sheet/MonthlyTable.js';
 import './SheetHome.css'
 import Nav from 'inferno-bootstrap/dist/Navigation/Nav';
@@ -23,80 +24,20 @@ class SheetHome extends Component {
       months: [],
       activeTab: 'monthly-table',
     };
-
-    this.onGetSheetValues = this.onGetSheetValues.bind(this);
-    this.onError = this.onError.bind(this);
-  }
-
-  async componentWillMount() {
-    try {
-      this.onGetSheetValues(
-        await GoogleAPIService.getSheetData(this.state.sheetId)
-      )
-    } catch (e) {
-      this.onError(e)
-
-    }
-  }
-
-  onError(error) {
-    this.setState({ error: error });
-  }
-
-  onGetSheetValues(data) {
-    this.setState({
-      loading: false,
-      data: data,
-      months: this.reduceToMonth(data)
-    })
-  }
-
-  reduceToMonth(movements) {
-    const monthHash = movements.reduce(
-      (r, c) => {
-        var key = parseInt(c.getMonthString().replace(/-/, ''), 10);
-        if (r[key] === undefined) {
-          r[key] = {
-            month: c.getMonth(),
-            key: key,
-            balance: 0,
-            credit: 0,
-            debit: 0,
-            movements: [],
-          }
-        }
-
-        r[key][c.value < 0 ? 'debit' : 'credit'] += c.value;
-        r[key].balance += c.value;
-        r[key].movements.push(c)
-
-        return r
-      },
-      {}
-    );
-
-    var months = [];
-    for (var key in monthHash) {
-      months.push(monthHash[key]);
-    }
-
-    months = months.sort((n, p) => n.key - p.key)
-
-    for (key in months) {
-      var m = months[key];
-      var prev = months[key - 1];
-      m.prev = prev;
-      m.initial = prev ? prev.final : 0;
-      m.final = m.initial + m.balance;
-    }
-
-    return months
   }
 
   toogleTab(tabId) {
     this.setState({
       activeTab: tabId,
     })
+  }
+
+  async componentWillMount() {
+    if (!this.state.sheetService || this.state.sheetId !== this.state.sheetService.getSheetId()) {
+      this.setState({
+        service : new MovementService(new SheetAPIService(this.state.sheetId)),
+      });
+    }
   }
 
   render() {
@@ -118,7 +59,7 @@ class SheetHome extends Component {
         </Nav>
         <TabContent className="card-body" fade activeTab={this.state.activeTab}>
           <TabPane tabId="monthly-table">
-            <MonthlyTable loading={this.state.loading} months={this.state.months} />
+            <MonthlyTable loading={this.state.loading} service={this.state.service} />
           </TabPane>
           <TabPane tabId="other">
             <Loading loading />

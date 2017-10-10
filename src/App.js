@@ -1,6 +1,6 @@
 import Component from 'inferno-component';
 import { IndexLink } from 'inferno-router';
-import GoogleAPIService from './GoogleAPIService';
+import GoogleAPIService from './Google/GoogleAPIService';
 import LoadSheetForm from './LoadSheetForm';
 
 import 'bootstrap/dist/css/bootstrap.css';

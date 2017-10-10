@@ -1,6 +1,6 @@
 /* global gapi */
 
-import Movement from './Movement';
+import promisify from './promisify';
 
 const PARAMS = {
   apiKey: 'AIzaSyCZ5_w5a91cUJVYStFGouS4ffbVgzkBk_E',
@@ -17,35 +17,10 @@ const PARAMS = {
 
 class GoogleAPIService {
 
-  
-
-  async getSheetData(id) {
-    await this.initGoogleAPI();
-
-    const data = await this.promisify(gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: id,
-      range: `A:E`,
-    }));
-
-    return this.convertArrayToMovement(data);
-  }
-
-  convertArrayToMovement(data) {
-    var movements = data.result.values.slice(1)
-    return movements
-      .map((array) => {
-        const date = array[0].split('/');
-        array[0] = new Date(date[2], (date[1] - 1), date[0]);
-        array[3] = (array[3][0] === '-' ? -1 : 1) * parseFloat(array[3].trim().split(' ').slice(-1)[0])
-        return array;
-      })
-      .map((array) => new Movement(...array))
-  }
-
   async listFiles(nextPageToken) {
     await this.initGoogleDriveAPI()
 
-    const response = await this.promisify(gapi.client.drive.files.list({
+    const response = await promisify(gapi.client.drive.files.list({
       nextPageToken: nextPageToken,
       q: `mimeType = 'application/vnd.google-apps.spreadsheet' and trashed = false`,
       fields: 'nextPageToken, files(id, name, parents)',
@@ -74,15 +49,11 @@ class GoogleAPIService {
 
   async initGoogleDriveAPI() {
     await this.initGoogleAPI();
-    await this.promisify(gapi.client.load('drive', 'v3'));
+    await promisify(gapi.client.load('drive', 'v3'));
   }
 
-  promisify(gp) {
-    return new Promise((f, r) => gp.then(f, r))
-  }
-
-  initGoogleAPI() {
-    return new Promise((f, r) => {
+  async initGoogleAPI() {
+    await new Promise((f, r) => {
       if (window.gapi) {
         return f();
       }
