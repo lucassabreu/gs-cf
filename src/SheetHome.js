@@ -51,8 +51,8 @@ class SheetHome extends Component {
     })
   }
 
-  reduceToMonth(moviments) {
-    const monthHash = moviments.reduce(
+  reduceToMonth(movements) {
+    const monthHash = movements.reduce(
       (r, c) => {
         var key = parseInt(c.getMonthString().replace(/-/, ''), 10);
         if (r[key] === undefined) {
@@ -62,13 +62,13 @@ class SheetHome extends Component {
             balance: 0,
             credit: 0,
             debit: 0,
-            moviments: [],
+            movements: [],
           }
         }
 
         r[key][c.value < 0 ? 'debit' : 'credit'] += c.value;
         r[key].balance += c.value;
-        r[key].moviments.push(c)
+        r[key].movements.push(c)
 
         return r
       },

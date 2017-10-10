@@ -1,4 +1,4 @@
-class Moviment {
+class Movement {
   date = null;
   category = null;
   description = null;
@@ -23,4 +23,4 @@ class Moviment {
   }
 }
 
-export default Moviment;
+export default Movement;

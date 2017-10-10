@@ -1,6 +1,6 @@
 /* global gapi */
 
-import Moviment from './Moviment';
+import Movement from './Movement';
 
 const PARAMS = {
   apiKey: 'AIzaSyCZ5_w5a91cUJVYStFGouS4ffbVgzkBk_E',
@@ -25,19 +25,19 @@ class GoogleAPIService {
       range: `A:E`,
     }));
 
-    return this.convertArrayToMoviment(data);
+    return this.convertArrayToMovement(data);
   }
 
-  convertArrayToMoviment(data) {
-    var moviments = data.result.values.slice(1)
-    return moviments
+  convertArrayToMovement(data) {
+    var movements = data.result.values.slice(1)
+    return movements
       .map((array) => {
         const date = array[0].split('/');
         array[0] = new Date(date[2], (date[1] - 1), date[0]);
         array[3] = (array[3][0] === '-' ? -1 : 1) * parseFloat(array[3].trim().split(' ').slice(-1)[0])
         return array;
       })
-      .map((array) => new Moviment(...array))
+      .map((array) => new Movement(...array))
   }
 
   async listFiles(nextPageToken) {
