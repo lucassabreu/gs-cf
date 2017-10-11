@@ -16,30 +16,32 @@ export default class SheetAPIService {
   }
 
   async getAll() {
-    await GoogleAPIService.initGoogleAPI();
+    await GoogleAPIService.initGoogleDriveAPI();
     const data = await promisify(gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: this.sheetId,
       range: `A:E`,
     }));
 
-    return data.result.values
-      .slice(1)
-      .map((array) => {
-        let dateParts = array[0].split('/');
-        let date = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+    let rows = data.result.values.slice(1);
+    let moviments = [];
+    for (var index in rows) {
+      let array = rows[index];
+      let dateParts = array[0].split('/');
+      let date = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+      if (!date.toISOString()) {
+        console.log(date);
+        throw new Error();
+      }
 
-        if (!date.toISOString()) {
-          console.log(date);
-          throw new Error();
-        }
-
-        return {
-          date: date.toISOString(),
-          category: array[1],
-          description: array[2],
-          value: (array[3][0] === '-' ? -1 : 1) * parseFloat(array[3].trim().split(' ').slice(-1)[0]),
-          origin: array[4],
-        }
-      })
+      moviments.push({
+        _id: index + 1,
+        date: date.toISOString(),
+        category: array[1],
+        description: array[2],
+        value: (array[3][0] === '-' ? -1 : 1) * parseFloat(array[3].trim().split(' ').slice(-1)[0]),
+        origin: array[4],
+      });
+    }
+    return moviments;
   }
 }

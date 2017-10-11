@@ -17,19 +17,29 @@ class MovementService {
   }
 
   hasBeenLoaded() {
-    return JSON.parse(localStorage.getItem('hasBeenLoaded')) === true;
+    return localStorage.getItem('hasBeenLoaded') !== null;
+  }
+
+  async reload() {
+    let db = this.getDb();
+
+    if (window._database) {
+      let allDocs = await db.allDocs();
+      await Promise.all(allDocs.rows.map(r => db.remove(r.id, r.value.rev)));
+      console.debug('clean');
+    }
+
+    let movements = await this.service.getAll()
+    await Promise.all(movements.map(m => db.put(m)));
+    localStorage.setItem('hasBeenLoaded', true);
   }
 
   async getMovements(filter) {
-    let db = this.getDb();
     if (!this.hasBeenLoaded()) {
-      let movements = await this.service.getAll()
-      let promises = movements
-        .map((m) => db.post(m));
-      await Promise.all(promises)
-      localStorage.setItem('hasBeenLoaded', JSON.stringify(true));
+      this.reload();
     }
 
+    let db = this.getDb();
     let result = await db.allDocs({ include_docs: true })
     return result.rows
       .map((r) => r.doc)
