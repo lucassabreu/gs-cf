@@ -20,10 +20,14 @@ class SheetHome extends Component {
       sheetId: props.params.id,
       error: null,
       loading: true,
-      data: [],
+      movements: [],
       months: [],
       activeTab: 'monthly-table',
     };
+
+    this.service = new MovementService(new SheetAPIService({
+      sheetId: this.state.sheetId
+    }));
   }
 
   toogleTab(tabId) {
@@ -33,11 +37,20 @@ class SheetHome extends Component {
   }
 
   async componentWillMount() {
-    if (!this.state.sheetService || this.state.sheetId !== this.state.sheetService.getSheetId()) {
-      this.setState({
-        service : new MovementService(new SheetAPIService(this.state.sheetId)),
-      });
+    if (this.state.loading) {
+      this.updateMovements();
     }
+  }
+
+  async updateMovements() {
+    const movements = await this.service.getMovements();
+    const months = await this.service.getMonths();
+
+    this.setState({
+      movements: movements,
+      months: months,
+      loading: false,
+    });
   }
 
   render() {
@@ -59,7 +72,7 @@ class SheetHome extends Component {
         </Nav>
         <TabContent className="card-body" fade activeTab={this.state.activeTab}>
           <TabPane tabId="monthly-table">
-            <MonthlyTable loading={this.state.loading} service={this.state.service} />
+            <MonthlyTable loading={this.state.loading} months={this.state.months} />
           </TabPane>
           <TabPane tabId="other">
             <Loading loading />

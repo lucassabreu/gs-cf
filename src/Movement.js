@@ -6,6 +6,10 @@ class Movement {
   origin = null;
 
   constructor(date, category, description, value, origin) {
+    if (!(date instanceof Date)) {
+      throw new Error(date);
+    }
+
     this.date = date;
     this.category = category;
     this.description = description;

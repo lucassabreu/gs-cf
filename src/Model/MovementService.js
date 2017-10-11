@@ -1,4 +1,5 @@
 import PouchDB from 'pouchdb';
+import Movement from '../Movement';
 
 class MovementService {
   service = null;
@@ -20,10 +21,35 @@ class MovementService {
   }
 
   async getMovements(filter) {
-    const db = this.getDb();
+    let db = this.getDb();
     if (!this.hasBeenLoaded()) {
-      const movements = this.service.getAll()
+      let movements = await this.service.getAll()
+      let promises = movements
+        .map((m) => db.post(m));
+      await Promise.all(promises)
+      localStorage.setItem('hasBeenLoaded', JSON.stringify(true));
     }
+
+    let result = await db.allDocs({ include_docs: true })
+    return result.rows
+      .map((r) => r.doc)
+      .map(m => {
+        let date = Date.parse(m.date);
+        m.date = date;
+        return m;
+      })
+      .map(m => new Movement(
+        new Date(m.date),
+        m.category,
+        m.description,
+        m.value,
+        m.origin
+      ));
+  }
+
+  async getMonths() {
+    let movements = await this.getMovements();
+    return this.reduceToMonth(movements);
   }
 
   reduceToMonth(movements) {
