@@ -28,6 +28,8 @@ class SheetHome extends Component {
     this.service = new SheetAPIService({
       sheetId: this.state.sheetId
     });
+
+    this.toogleTab = this.toogleTab.bind(this);
   }
 
   toogleTab(tabId) {
@@ -36,7 +38,7 @@ class SheetHome extends Component {
     })
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     if (this.state.loading) {
       this.updateMovements();
     }
@@ -51,21 +53,14 @@ class SheetHome extends Component {
   }
 
   render() {
-
     return (
       <div className="card col-12">
-        <Nav pills className="card-body">
-          <NavSimpleItem id="totals" activeTab={this.state.activeTab}
-            toogle={(id) => this.toogleTab(id)}>
+        <Nav fill pills className="card-body">
+          <NavSimpleItem id="totals" activeTab={this.state.activeTab} toogle={this.toogleTab}>
             Totais
           </NavSimpleItem>
-          <NavSimpleItem id="monthly-table" activeTab={this.state.activeTab}
-            toogle={(id) => this.toogleTab(id)}>
+          <NavSimpleItem id="monthly-table" activeTab={this.state.activeTab} toogle={this.toogleTab}>
             Saldos Mensais
-          </NavSimpleItem>
-          <NavSimpleItem id="other" activeTab={this.state.activeTab}
-            toogle={(id) => this.toogleTab(id)}>
-            Other
           </NavSimpleItem>
         </Nav>
         <TabContent className="card-body" fade activeTab={this.state.activeTab}>
@@ -73,7 +68,7 @@ class SheetHome extends Component {
             <Totals loading={this.state.loading} movements={this.state.movements} />
           </TabPane>
           <TabPane tabId="monthly-table">
-            <MonthlyTable loading={this.state.loading} months={this.state.months} />
+            <MonthlyTable loading={this.state.loading} months={this.state.months} sheetId={this.state.sheetId} />
           </TabPane>
         </TabContent>
       </div>

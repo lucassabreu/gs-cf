@@ -2,8 +2,11 @@ import formatMoney from './formatMoney';
 import formatDate from './formatDate';
 import Loading from '../Loading';
 import './MonthlyTable.css'
+import { Link } from 'inferno-router';
 
-export default function MonthlyTable({ className, loading, months }) {
+const yearMonth = (date) => date.getFullYear() + '-' + (date.getMonth() > 9 ? '0' : '') + (date.getMonth() + 1)
+
+export default function MonthlyTable({ className, loading, months, sheetId }) {
   months = months.sort((p, n) => n.month - p.month);
   return (
     <Loading loading={loading}>
@@ -15,6 +18,7 @@ export default function MonthlyTable({ className, loading, months }) {
           <th className="text-right">Debit</th>
           <th className="text-right">Balance</th>
           <th className="text-right">Final</th>
+          <th></th>
         </thead>
         <tbody>
           {months.map((m) => {
@@ -27,6 +31,11 @@ export default function MonthlyTable({ className, loading, months }) {
                 <td className="text-right">{formatMoney(m.debit, 2, ',', '.')}</td>
                 <td className="text-right">{formatMoney(m.balance, 2, ',', '.')}</td>
                 <td className="text-right">{formatMoney(m.final, 2, ',', '.')}</td>
+                <td>
+                  <Link to={`/sheet/${sheetId}/${yearMonth(m.month)}`}>
+                    <i className="material-icons">list</i>
+                  </Link>
+                </td>
               </tr>
             )
           })}
