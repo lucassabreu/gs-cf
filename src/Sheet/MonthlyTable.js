@@ -4,6 +4,7 @@ import Loading from '../Loading';
 import './MonthlyTable.css'
 
 export default function MonthlyTable({ className, loading, months }) {
+  months = months.sort((p, n) => n.month - p.month);
   return (
     <Loading loading={loading}>
       <table className={className + " monthlyTable table"}>

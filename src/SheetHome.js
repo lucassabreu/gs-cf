@@ -1,15 +1,15 @@
 import Component from 'inferno-component';
 import SheetAPIService from './Google/SheetAPIService';
-import MovementService from './Model/MovementService';
-import MonthlyTable from './Sheet/MonthlyTable.js';
-import './SheetHome.css'
 import Nav from 'inferno-bootstrap/dist/Navigation/Nav';
 import NavItem from 'inferno-bootstrap/dist/Navigation/NavItem';
 import NavLink from 'inferno-bootstrap/dist/Navigation/NavLink';
 import TabContent from 'inferno-bootstrap/dist/TabContent';
 import TabPane from 'inferno-bootstrap/dist/TabPane';
-import Loading from './Loading';
 import classnames from 'classnames';
+
+import './SheetHome.css'
+import MonthlyTable from './Sheet/MonthlyTable.js';
+import Totals from './Sheet/Totals.js';
 
 class SheetHome extends Component {
   constructor(props, { router }) {
@@ -22,12 +22,12 @@ class SheetHome extends Component {
       loading: true,
       movements: [],
       months: [],
-      activeTab: 'monthly-table',
+      activeTab: 'totals',
     };
 
-    this.service = new MovementService(new SheetAPIService({
+    this.service = new SheetAPIService({
       sheetId: this.state.sheetId
-    }));
+    });
   }
 
   toogleTab(tabId) {
@@ -43,43 +43,54 @@ class SheetHome extends Component {
   }
 
   async updateMovements() {
-    const movements = await this.service.getMovements();
-    const months = await this.service.getMonths();
-
     this.setState({
-      movements: movements,
-      months: months,
+      movements: await this.service.getMovements(),
+      months: await this.service.getMonths(),
       loading: false,
     });
   }
 
   render() {
+
     return (
       <div className="card col-12">
         <Nav pills className="card-body">
-          <NavItem>
-            <NavLink className={classnames({ active: this.state.activeTab === 'monthly-table' })}
-              onClick={() => this.toogleTab('monthly-table')}>
-              Saldo Mensal
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink className={classnames({ active: this.state.activeTab === 'other' })}
-              onClick={() => this.toogleTab('other')}>
-              Other
-            </NavLink>
-          </NavItem>
+          <NavSimpleItem id="totals" activeTab={this.state.activeTab}
+            toogle={(id) => this.toogleTab(id)}>
+            Totais
+          </NavSimpleItem>
+          <NavSimpleItem id="monthly-table" activeTab={this.state.activeTab}
+            toogle={(id) => this.toogleTab(id)}>
+            Saldos Mensais
+          </NavSimpleItem>
+          <NavSimpleItem id="other" activeTab={this.state.activeTab}
+            toogle={(id) => this.toogleTab(id)}>
+            Other
+          </NavSimpleItem>
         </Nav>
         <TabContent className="card-body" fade activeTab={this.state.activeTab}>
+          <TabPane tabId="totals">
+            <Totals loading={this.state.loading} movements={this.state.movements} />
+          </TabPane>
           <TabPane tabId="monthly-table">
             <MonthlyTable loading={this.state.loading} months={this.state.months} />
-          </TabPane>
-          <TabPane tabId="other">
-            <Loading loading />
           </TabPane>
         </TabContent>
       </div>
     )
+  }
+}
+
+class NavSimpleItem extends Component {
+  render() {
+    return (
+      <NavItem>
+        <NavLink className={classnames({ active: this.props.activeTab === this.props.id })}
+          onClick={() => this.props.toogle(this.props.id)}>
+          {this.props.children}
+        </NavLink>
+      </NavItem>
+    );
   }
 }
 
