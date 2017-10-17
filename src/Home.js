@@ -40,16 +40,17 @@ class Home extends Component {
   }
 
   render() {
+    if (this.state.loading) {
+      return <Loading />
+    }
     return (
-      <Loading loading={this.state.loading}>
-        <div className="card col-12">
-          <ul className="list-group list-group-flush">
-            {this.state.files.map((f) => {
-              return <li class="list-group-item"><Link to={'/sheet/' + f.id}>{f.name}</Link></li>
-            })}
-          </ul>
-        </div>
-      </Loading>
+      <div className="card col-12">
+        <ul className="list-group list-group-flush">
+          {this.state.files.map((f) => {
+            return <li class="list-group-item"><Link to={'/sheet/' + f.id}>{f.name}</Link></li>
+          })}
+        </ul>
+      </div>
     )
   }
 }

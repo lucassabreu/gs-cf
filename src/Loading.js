@@ -1,13 +1,11 @@
-export default function Loading({ loading, children }) {
+export default function Loading() {
   return (
-    loading ?
-      <div className="row">
-        <div className="col-12">
-          <div className="progress">
-            <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style={{ width: '100%' }} ></div>
-          </div>
+    <div className="row">
+      <div className="col-12">
+        <div className="progress">
+          <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style={{ width: '100%' }} ></div>
         </div>
       </div>
-      : children
+    </div>
   );
 }
