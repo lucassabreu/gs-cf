@@ -48,7 +48,7 @@ export default class SheetAPIService {
         origin: array[4],
       });
     }
-    return moviments;
+    return moviments.filter(m => m.value !== 0);
   }
 
   /**
