@@ -13,7 +13,7 @@ export default function MonthlyTable({ className, loading, months, sheetId }) {
 
   months = months.sort((p, n) => n.month - p.month);
   return (
-    <table className={className + " monthlyTable table"}>
+    <table className={className + " monthlyTable table table-sm"}>
       <thead>
         <th>Month</th>
         <th className="text-right">Initial</th>
