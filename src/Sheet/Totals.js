@@ -2,7 +2,7 @@ import Loading from '../Loading';
 import formatMoney from './formatMoney';
 import reduceMovements from './reduceMovements';
 
-export default function Totals({ loading, movements }) {
+export default function Totals({ loading, movements, className }) {
   let totals = reduceMovements(movements);
 
   if (loading) {
@@ -10,22 +10,22 @@ export default function Totals({ loading, movements }) {
   }
 
   return (
-    <form className="row" style={{ textAlign: 'center' }}>
+    <form className={"row " + className} style={{ textAlign: 'center' }}>
       <div className="col-4">
         <div className="form-group">
-          <label className="col-form-label">Créditos</label>
+          <label className="col-form-label"><strong>Créditos</strong></label>
           <div>{formatMoney(totals.totalCredit, 2, ',', '.')}</div>
         </div>
       </div>
       <div className="col-4">
         <div className="form-group">
-          <label className="col-form-label">Débitos</label>
+          <label className="col-form-label"><strong>Débitos</strong></label>
           <div>{formatMoney(totals.totalDebit, 2, ',', '.')}</div>
         </div>
       </div>
       <div className="col-4">
         <div className="form-group">
-          <label className="col-form-label">Total</label>
+          <label className="col-form-label"><strong>Total</strong></label>
           <div>{formatMoney(totals.total, 2, ',', '.')}</div>
         </div>
       </div>

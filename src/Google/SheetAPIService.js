@@ -55,8 +55,10 @@ export default class SheetAPIService {
    * Get all Moviments from a filter
    * @param {Object} filter 
    * @param {Date} filter.month Month to filter
+   * @param {Date} filter.start Start nonth to filter
+   * @param {Date} filter.end End month to filter
    */
-  async getMovements({ month }) {
+  async getMovements({ month, start, end }) {
     let rows = await this.getAll();
 
     if (month) {
@@ -64,6 +66,16 @@ export default class SheetAPIService {
         m.date.getFullYear() === month.getFullYear() &&
         m.date.getMonth() === month.getMonth()
       ));
+    }
+
+    if (start) {
+      rows = rows.filter(m => m.date >= start);
+    }
+
+    if (end) {
+      end = new Date(end.getTime());
+      end = new Date(end.setMonth(end.getMonth() + 1));
+      rows = rows.filter(m => m.date < end);
     }
 
     return rows.map(m => new Movement(

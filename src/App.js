@@ -1,5 +1,5 @@
 import Component from 'inferno-component';
-import { IndexLink } from 'inferno-router';
+import { IndexLink, Link } from 'inferno-router';
 import GoogleAPIService from './Google/GoogleAPIService';
 import LoadSheetForm from './LoadSheetForm';
 
@@ -21,9 +21,21 @@ class App extends Component {
   render() {
     var menu = null;
     if (this.state.router.url !== "/login") {
+      let links = [];
+      if (this.props.params.id) {
+        links.push(
+          <li className="nav-item">
+            <Link className="btn nav-link" to={`/sheet/${this.props.params.id}/compare`}>
+              Compare
+            </Link>
+          </li>
+        );
+      }
+
       menu = (
         <div className="collapse navbar-collapse" id="navbars">
           <ul className="navbar-nav mr-auto">
+            {links}
             <li className="nav-item">
               <span className="btn nav-link" onClick={this.signOut}>Logout</span>
             </li>

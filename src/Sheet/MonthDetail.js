@@ -6,10 +6,8 @@ import TotalsByCategory from './TotalsByCategory';
 import formatDate from './formatDate';
 import formatMoney from './formatMoney';
 
-import classnames from 'classnames';
 import Nav from 'inferno-bootstrap/dist/Navigation/Nav';
-import NavItem from 'inferno-bootstrap/dist/Navigation/NavItem';
-import NavLink from 'inferno-bootstrap/dist/Navigation/NavLink';
+import NavSimpleItem from '../NavSimpleItem';
 import TabContent from 'inferno-bootstrap/dist/TabContent';
 import TabPane from 'inferno-bootstrap/dist/TabPane';
 
@@ -17,7 +15,6 @@ class MonthDetail extends Component {
   constructor(props, { router }) {
     super(props)
     let { params } = props;
-
 
     this.state = {
       sheetId: params.id,
@@ -53,7 +50,11 @@ class MonthDetail extends Component {
 
   render() {
     if (this.state.loading) {
-      return <Loading />;
+      return <div className="card col-12">
+        <div className="card-body">
+          <Loading />
+        </div>
+      </div>;
     }
 
     let line = (movement) => {
@@ -63,7 +64,6 @@ class MonthDetail extends Component {
           <td>{movement.category}</td>
           <td>{movement.description}</td>
           <td className="text-right">{formatMoney(movement.value, 2, ',', '.')}</td>
-          <td className="text-right">{formatMoney(movement.getValue(), 2, ',', '.')}</td>
           <td>{movement.origin}</td>
         </tr>
       );
@@ -71,6 +71,7 @@ class MonthDetail extends Component {
 
     return (
       <div className="card col-12">
+        <Totals className="card-body" movements={this.state.movements.filter(m => m.getValue() !== 0)} />
         <Nav fill pills className="card-body">
           <NavSimpleItem id="movements" activeTab={this.state.activeTab} toogle={this.toogleTab}>
             Totais
@@ -81,13 +82,12 @@ class MonthDetail extends Component {
         </Nav>
         <TabContent className="card-body" fade activeTab={this.state.activeTab}>
           <TabPane tabId="movements">
-            <Totals movements={this.state.movements.filter(m => m.getValue() !== 0)} />
             <table className="table table-sm">
               <thead>
                 <th>Date</th>
                 <th>Category</th>
                 <th>Description</th>
-                <th className="text-right" colspan="2">Value</th>
+                <th className="text-right">Value</th>
                 <th>Origin</th>
               </thead>
               <tbody>
@@ -100,19 +100,6 @@ class MonthDetail extends Component {
           </TabPane>
         </TabContent>
       </div>
-    );
-  }
-}
-
-class NavSimpleItem extends Component {
-  render() {
-    return (
-      <NavItem>
-        <NavLink className={classnames({ active: this.props.activeTab === this.props.id })}
-          onClick={() => this.props.toogle(this.props.id)}>
-          {this.props.children}
-        </NavLink>
-      </NavItem>
     );
   }
 }

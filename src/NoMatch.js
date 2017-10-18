@@ -1,1 +1,1 @@
-export const NoMatch = (children, props) => <div>no match</div>
+export default (props) => <div className="col-12">no match</div>
