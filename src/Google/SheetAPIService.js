@@ -92,7 +92,9 @@ export default class SheetAPIService {
    */
   async getMonthTotals(...month) {
     let months = await this.getMonths();
-    return months.filter(m => m.month.getFullYear() === month.getFullYear() && m.month.getMonth() === month.getMonth());
+    return months.filter(mov => (
+      month.filter(m => mov.month.getFullYear() === m.getFullYear() && mov.month.getMonth() === m.getMonth()).length > 0
+    ));
   }
 
   async getMonths() {

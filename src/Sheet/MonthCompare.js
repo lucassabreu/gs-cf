@@ -3,6 +3,13 @@ import SheetAPIService from '../Google/SheetAPIService';
 import Loading from '../Loading';
 import Totals from './Totals';
 import TotalsByCategory from './TotalsByCategory';
+import MonthlyTable from './MonthlyTable';
+import Compare from './Compare';
+
+import Nav from 'inferno-bootstrap/dist/Navigation/Nav';
+import NavSimpleItem from '../NavSimpleItem';
+import TabContent from 'inferno-bootstrap/dist/TabContent';
+import TabPane from 'inferno-bootstrap/dist/TabPane';
 
 const STATE = {
   NOT_LOADED: 0,
@@ -15,14 +22,14 @@ class MonthCompare extends Component {
     super(props)
 
     let today = new Date();
-    today = new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0);
 
     this.state = {
       sheetId: props.params.id,
       loading: STATE.NOT_LOADED,
-      startDate: today,
-      endDate: today,
+      startDate: new Date(today.getFullYear(), today.getMonth() - 1, 1, 0, 0, 0),
+      endDate: new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0),
       movements: [],
+      activeTab: "movements",
     };
 
     this.service = new SheetAPIService({
@@ -30,18 +37,37 @@ class MonthCompare extends Component {
     });
 
     this.loadData = this.loadData.bind(this);
+    this.toogleTab = this.toogleTab.bind(this);
+  }
+
+  toogleTab(activeTab) {
+    this.setState({
+      activeTab: activeTab,
+    });
+  }
+
+  componentWillMount() {
+    if (this.state.loading === STATE.NOT_LOADED) {
+      this.loadData();
+    }
   }
 
   async loadData(event) {
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
 
     this.setState({ loading: STATE.LOADING });
 
-    let months = await this.service.getMonthTotals(this.state.startDate, this.state.endDate)
-      .sort((n, p) => n.month - p.month);
+    let months = (await this.service.getMonthTotals(this.state.startDate, this.state.endDate))
+      .sort((n, p) => p.month.getTime() - n.month.getTime());
 
     let endMonthTotal = months.pop();
     let startMonthTotal = months.pop();
+
+    if (startMonthTotal === undefined) {
+      startMonthTotal = endMonthTotal;
+    }
 
     this.setState({
       movements: await this.service.getMovements({
@@ -74,10 +100,30 @@ class MonthCompare extends Component {
     }
 
     if (this.state.loading === STATE.LOADED) {
-      body = [
-        <CardBody><Totals movements={this.state.movements} /></CardBody>,
-        <CardBody><TotalsByCategory movements={this.state.movements} /></CardBody>,
-      ];
+      body = [];
+      body.push(
+        <CardBody>
+          <Nav fill pills>
+            <NavSimpleItem id="movements" activeTab={this.state.activeTab} toogle={this.toogleTab}>Totais</NavSimpleItem>
+            <NavSimpleItem id="months" activeTab={this.state.activeTab} toogle={this.toogleTab}>Mês</NavSimpleItem>
+            <NavSimpleItem id="comparation" activeTab={this.state.activeTab} toogle={this.toogleTab}>Comparação</NavSimpleItem>
+          </Nav>
+        </CardBody>
+      );
+      body.push(
+        <TabContent className="card-body" fade activeTab={this.state.activeTab}>
+          <TabPane tabId="movements">
+            <Totals movements={this.state.movements} />
+            <TotalsByCategory movements={this.state.movements} />
+          </TabPane>
+          <TabPane tabId="months">
+            <MonthlyTable months={[this.state.startMonthTotal, this.state.endMonthTotal]} sheetId={this.state.sheetId} />
+          </TabPane>
+          <TabPane tabId="comparation">
+            <Compare movements={this.state.movements} startMonth={this.state.startMonthTotal} endMonth={this.state.endMonthTotal} />
+          </TabPane>
+        </TabContent>
+      );
     }
 
     return (
