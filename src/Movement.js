@@ -1,15 +1,17 @@
 class Movement {
+  id = null;
   date = null;
   category = null;
   description = null;
   value = null;
   origin = null;
 
-  constructor(date, category, description, value, origin) {
+  constructor(id, date, category, description, value, origin) {
     if (!(date instanceof Date)) {
       throw new Error(date);
     }
 
+    this.id = id;
     this.date = date;
     this.category = category;
     this.description = description;

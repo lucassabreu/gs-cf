@@ -1,12 +1,9 @@
-import NavItem from 'inferno-bootstrap/dist/Navigation/NavItem';
-import NavLink from 'inferno-bootstrap/dist/Navigation/NavLink';
-
-import classnames from 'classnames';
+import React from 'react';
+import { NavItem, NavLink } from 'reactstrap';
 
 export default ({ id, activeTab, toogle, children }) => (
   <NavItem>
-    <NavLink className={classnames({ active: activeTab === id })}
-      onClick={() => toogle(id)} href="#">
+    <NavLink active={activeTab === id} onClick={() => toogle(id)} href="#">
       {children}
     </NavLink>
   </NavItem>

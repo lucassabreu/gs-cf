@@ -1,4 +1,4 @@
-import Component from 'inferno-component';
+import React, { Component } from 'react';
 import SheetAPIService from '../Google/SheetAPIService';
 import Loading from '../Loading';
 import Totals from './Totals';
@@ -6,15 +6,13 @@ import TotalsByCategory from './TotalsByCategory';
 import formatDate from './formatDate';
 import formatMoney from './formatMoney';
 
-import Nav from 'inferno-bootstrap/dist/Navigation/Nav';
 import NavSimpleItem from '../NavSimpleItem';
-import TabContent from 'inferno-bootstrap/dist/TabContent';
-import TabPane from 'inferno-bootstrap/dist/TabPane';
+import { TabContent, TabPane, Nav } from 'reactstrap';
 
 class MonthDetail extends Component {
   constructor(props, { router }) {
     super(props)
-    let { params } = props;
+    let { params } = props.match;
 
     this.state = {
       sheetId: params.id,
@@ -32,9 +30,11 @@ class MonthDetail extends Component {
   }
 
   toogleTab(tabId) {
-    this.setState({
-      activeTab: tabId,
-    })
+    if (this.state.activeTab !== tabId) {
+      this.setState({
+        activeTab: tabId,
+      })
+    }
   }
 
   async componentWillMount() {
@@ -59,7 +59,7 @@ class MonthDetail extends Component {
 
     let line = (movement) => {
       return (
-        <tr>
+        <tr key={movement.id}>
           <td>{formatDate(movement.date)}</td>
           <td>{movement.category}</td>
           <td>{movement.description}</td>
@@ -72,7 +72,7 @@ class MonthDetail extends Component {
     return (
       <div className="card col-12">
         <Totals className="card-body" movements={this.state.movements.filter(m => m.getValue() !== 0)} />
-        <Nav fill pills className="card-body">
+        <Nav className="card-body nav-pills nav-fill">
           <NavSimpleItem id="movements" activeTab={this.state.activeTab} toogle={this.toogleTab}>
             Totais
           </NavSimpleItem>
@@ -80,15 +80,17 @@ class MonthDetail extends Component {
             Categorias
           </NavSimpleItem>
         </Nav>
-        <TabContent className="card-body" fade activeTab={this.state.activeTab}>
+        <TabContent className="card-body" activeTab={this.state.activeTab}>
           <TabPane tabId="movements">
             <table className="table table-sm">
               <thead>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th className="text-right">Value</th>
-                <th>Origin</th>
+                <tr>
+                  <th>Data</th>
+                  <th>Categoria</th>
+                  <th>Descrição</th>
+                  <th className="text-right">Valor</th>
+                  <th>Origem</th>
+                </tr>
               </thead>
               <tbody>
                 {this.state.movements.map(line)}

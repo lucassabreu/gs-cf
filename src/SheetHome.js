@@ -1,4 +1,4 @@
-import Component from 'inferno-component';
+import React, { Component } from 'react';
 import SheetAPIService from './Google/SheetAPIService';
 
 import './SheetHome.css'
@@ -12,7 +12,7 @@ class SheetHome extends Component {
 
     this.state = {
       router: router,
-      sheetId: props.params.id,
+      sheetId: props.match.params.id,
       error: null,
       loading: true,
       movements: [],
@@ -52,16 +52,20 @@ class SheetHome extends Component {
       <div className="card-body">{children}</div>
     );
 
-    let body = <CardBody><Loading /></CardBody>
-    if (this.state.loading === false) {
-      body = [
-        <CardBody><Totals loading={this.state.loading} movements={this.state.movements} /></CardBody>,
-        <CardBody><MonthlyTable loading={this.state.loading} months={this.state.months} sheetId={this.state.sheetId} /></CardBody>
-      ]
+    if (this.state.loading) {
+      return <div className="card col-12"><CardBody><Loading /></CardBody></div>
     }
 
     return (
-      <div className="card col-12">{body}</div>
+      <div className="card col-12">
+        <CardBody><Totals loading={this.state.loading} movements={this.state.movements} /></CardBody>
+        <CardBody>
+          <MonthlyTable
+            loading={this.state.loading}
+            months={this.state.months}
+            sheetId={this.state.sheetId} />
+        </CardBody>
+      </div>
     )
   }
 }

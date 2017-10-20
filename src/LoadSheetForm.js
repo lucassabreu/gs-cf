@@ -1,11 +1,12 @@
-import Component from 'inferno-component';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 
 class LoadSheetForm extends Component {
-  constructor(props, { router }) {
+  constructor(props) {
     super(props);
+
     this.state = {
-      router: router,
-      spreadsheetId: props.params.id || ""
+      spreadsheetId: props.match.params.id,
     };
 
     this.openSheet = this.openSheet.bind(this);
@@ -14,7 +15,8 @@ class LoadSheetForm extends Component {
 
   openSheet(event) {
     event.preventDefault();
-    this.state.router.push(`/sheet/${this.state.spreadsheetId}`);
+    let { match, location } = this.props;
+    location.push(`/sheet/${match.params.id}`);
     return false;
   }
 
@@ -26,13 +28,13 @@ class LoadSheetForm extends Component {
 
   render() {
     return (
-      <form class="form-inline" onSubmit={this.openSheet}>
-        <input class="form-control mr-sm-2" type="text" placeholder="Spreadsheet ID"
+      <form className="form-inline" onSubmit={this.openSheet}>
+        <input className="form-control mr-sm-2" type="text" placeholder="Spreadsheet ID"
           onInput={this.onSpreadsheetIdInput} value={this.state.spreadsheetId} />
-        <button class="btn btn-outline-success" type="submit">Abrir</button>
+        <button className="btn btn-outline-success" type="submit">Abrir</button>
       </form>
     );
   }
 }
 
-export default LoadSheetForm;
+export default withRouter(LoadSheetForm);

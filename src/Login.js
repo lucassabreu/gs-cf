@@ -1,4 +1,4 @@
-import Component from 'inferno-component';
+import React, { Component } from 'react';
 import GoogleAPIService from './Google/GoogleAPIService';
 
 class Login extends Component {

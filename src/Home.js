@@ -1,5 +1,5 @@
-import Component from 'inferno-component';
-import { Link } from 'inferno-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import GoogleAPIService from './Google/GoogleAPIService';
 import Loading from './Loading';
 
@@ -46,9 +46,11 @@ class Home extends Component {
     return (
       <div className="card col-12">
         <ul className="list-group list-group-flush">
-          {this.state.files.map((f) => {
-            return <li class="list-group-item"><Link to={'/sheet/' + f.id}>{f.name}</Link></li>
-          })}
+          {this.state.files.map((f) => (
+            <li key={f.id} className="list-group-item">
+              <Link to={'/sheet/' + f.id}>{f.name}</Link>
+            </li>
+          ))}
         </ul>
       </div>
     )

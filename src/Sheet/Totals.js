@@ -1,3 +1,4 @@
+import React from 'react';
 import Loading from '../Loading';
 import formatMoney from './formatMoney';
 import reduceMovements from './reduceMovements';

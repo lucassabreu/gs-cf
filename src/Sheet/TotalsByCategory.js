@@ -1,3 +1,4 @@
+import React from 'react';
 import formatMoney from './formatMoney';
 
 export default function TotalsByCategory({ movements }) {
@@ -27,16 +28,18 @@ export default function TotalsByCategory({ movements }) {
   return (
     <table className="table">
       <thead>
-        <th>Categoria</th>
-        <th className="text-right">Valor</th>
-      </thead>
-      {categories.map(c => (
         <tr>
-          <td>{c.category}</td>
-          <td className="text-right">{formatMoney(c.value, 2, ',', '.')}</td>
+          <th>Categoria</th>
+          <th className="text-right">Valor</th>
         </tr>
-      ))}
+      </thead>
       <tbody>
+        {categories.map(c => (
+          <tr key={c.category}>
+            <td>{c.category}</td>
+            <td className="text-right">{formatMoney(c.value, 2, ',', '.')}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );

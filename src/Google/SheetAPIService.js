@@ -79,6 +79,7 @@ export default class SheetAPIService {
     }
 
     return rows.map(m => new Movement(
+      m._id,
       new Date(m.date),
       m.category,
       m.description,
