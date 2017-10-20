@@ -3,7 +3,7 @@ import { Switch, Route, Link, withRouter } from 'react-router-dom'
 import Async from 'react-code-splitting'
 
 // import authorizedOnly from './authorizedOnly';
-import LoadSheetForm from './LoadSheetForm'
+import Menu from './Menu'
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
@@ -16,22 +16,6 @@ const MonthCompare = (props) => <Async load={import('./Sheet/MonthCompare')} com
 
 const Home = (props) => <Async load={import('./Home')} componentProps={props} />;
 const NoMatch = (props) => <Async load={import('./NoMatch')} componentProps={props} />;
-
-const Menu = withRouter(({ match, signOut }) => (
-  <div className="collapse navbar-collapse" id="navbars">
-    <ul className="navbar-nav mr-auto">
-      {match.params.id === undefined ? null :
-        <li className="nav-item">
-          <Link className="btn nav-link" to={`/sheet/${match.params.id}/compare`}>Compare</Link>
-        </li>
-      }
-      <li className="nav-item">
-        <span className="btn nav-link" onClick={signOut}>Logout</span>
-      </li>
-    </ul>
-    <LoadSheetForm params={match.params} />
-  </div>
-))
 
 const App = ({ match }) => {
   return (
@@ -54,8 +38,8 @@ const App = ({ match }) => {
                 <Route exact path="/" component={Home} />
                 <Route path="/login" component={Login} />
                 <Route exact path="/sheet/:id" component={SheetHome} />
-                <Route path="/sheet/:id/compare" component={MonthCompare} />
-                <Route path="/sheet/:id/:year-:month" component={MonthDetail} />
+                <Route exact path="/sheet/:id/compare" component={MonthCompare} />
+                <Route exact path="/sheet/:id/:year-:month" component={MonthDetail} />
                 <Route component={NoMatch} />
               </Switch>
             </section>
