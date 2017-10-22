@@ -18,7 +18,7 @@ class Menu extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { sheetId: props.match.params.id };
+    this.state = { sheetId: props.match.params.id || "" };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -46,7 +46,7 @@ class Menu extends Component {
     return (
       <div className="collapse navbar-collapse" id="navbars">
         <ul className="navbar-nav mr-auto">
-          {this.state.sheetId === undefined ? null :
+          {this.state.sheetId.length === 0 ? null :
             <li className="nav-item">
               <Link className="btn nav-link" to={`/sheet/${this.state.sheetId}/compare`}>Compare</Link>
             </li>
@@ -55,11 +55,6 @@ class Menu extends Component {
             <span className="btn nav-link" onClick={this.props.signOut}>Logout</span>
           </li>
         </ul>
-        <form className="form-inline" onSubmit={this.handleSubmit}>
-          <input className="form-control mr-sm-2" type="text" placeholder="Spreadsheet ID"
-            onChange={this.handleChange} value={this.state.sheetId} />
-          <button className="btn btn-outline-success" type="submit">Abrir</button>
-        </form>
       </div>
     )
   }
