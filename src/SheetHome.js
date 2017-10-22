@@ -5,8 +5,15 @@ import './SheetHome.css'
 import MonthlyTable from './Sheet/MonthlyTable.js';
 import Totals from './Sheet/Totals.js';
 import Loading from './Loading';
+import PropTypes from 'prop-types';
 
 class SheetHome extends Component {
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.any,
+    }).isRequired
+  }
+
   constructor(props, { router }) {
     super(props);
 

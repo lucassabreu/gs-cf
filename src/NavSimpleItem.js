@@ -1,10 +1,20 @@
 import React from 'react';
 import { NavItem, NavLink } from 'reactstrap';
+import PropTypes from 'prop-types';
 
-export default ({ id, activeTab, toogle, children }) => (
+const NavSimpleItem = ({ id, activeTab, toogle, children }) => (
   <NavItem>
     <NavLink active={activeTab === id} onClick={() => toogle(id)} href="#">
       {children}
     </NavLink>
   </NavItem>
 )
+
+NavSimpleItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  activeTab: PropTypes.string.isRequired,
+  toogle: PropTypes.func.isRequired,
+  children: PropTypes.element.isRequired,
+}
+
+export default NavSimpleItem

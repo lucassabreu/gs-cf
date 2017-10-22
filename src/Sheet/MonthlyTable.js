@@ -4,10 +4,11 @@ import formatDate from './formatDate';
 import Loading from '../Loading';
 import './MonthlyTable.css'
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const yearMonth = (date) => date.getFullYear() + '-' + (date.getMonth() > 9 ? '0' : '') + (date.getMonth() + 1)
 
-export default function MonthlyTable({ className, loading, months, sheetId }) {
+function MonthlyTable({ className, loading, months, sheetId }) {
   if (loading) {
     return <Loading />
   }
@@ -49,3 +50,12 @@ export default function MonthlyTable({ className, loading, months, sheetId }) {
     </table>
   );
 }
+
+MonthlyTable.propTypes = {
+  className: PropTypes.string,
+  loading: PropTypes.bool,
+  months: PropTypes.array,
+  sheetId: PropTypes.string,
+}
+
+export default MonthlyTable

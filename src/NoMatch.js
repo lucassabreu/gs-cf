@@ -1,3 +1,3 @@
 import React from 'react';
-
-export default (props) => <div className="col-12">no match</div>
+const NoMatch = () => <div className="col-12">no match</div>
+export default NoMatch

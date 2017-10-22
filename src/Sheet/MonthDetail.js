@@ -8,9 +8,16 @@ import formatMoney from './formatMoney';
 
 import NavSimpleItem from '../NavSimpleItem';
 import { TabContent, TabPane, Nav } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 class MonthDetail extends Component {
-  constructor(props, { router }) {
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.any,
+    }).isRequired
+  }
+
+  constructor(props) {
     super(props)
     let { params } = props.match;
 

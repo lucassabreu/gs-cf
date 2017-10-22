@@ -8,6 +8,7 @@ import Compare from './Compare';
 
 import NavSimpleItem from '../NavSimpleItem';
 import { TabContent, TabPane, Nav } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 const STATE = {
   NOT_LOADED: 0,
@@ -16,6 +17,14 @@ const STATE = {
 };
 
 class MonthCompare extends Component {
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+    }).isRequired
+  }
+
   constructor(props) {
     super(props)
 

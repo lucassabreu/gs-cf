@@ -1,23 +1,39 @@
 import React, { Component } from 'react'
 import { matchPath } from 'react-router'
 import { Link, withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types';
 
 class Menu extends Component {
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+    }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }).isRequired,
+    signOut: PropTypes.func.isRequired,
+  }
+
   constructor(props) {
     super(props);
     this.state = { sheetId: props.match.params.id };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  openSheet(event) {
+  /** @param {Event} event */
+  handleSubmit(event) {
     event.preventDefault();
     this.props.history.push(`/sheet/${this.state.sheetId}`);
     return false;
   }
 
-  onChangeSheetId(event) {
-    this.setState({
-      sheetId: event.target.value,
-    });
+  /** @param {Event} event */
+  handleChange(event) {
+    this.setState({ sheetId: event.target.value })
   }
 
   componentWillReceiveProps(newProps) {
@@ -39,9 +55,9 @@ class Menu extends Component {
             <span className="btn nav-link" onClick={this.props.signOut}>Logout</span>
           </li>
         </ul>
-        <form className="form-inline" onSubmit={(e) => this.openSheet(e)}>
+        <form className="form-inline" onSubmit={this.handleSubmit}>
           <input className="form-control mr-sm-2" type="text" placeholder="Spreadsheet ID"
-            onChange={(e) => this.onChangeSheetId(e)} value={this.state.sheetId} />
+            onChange={this.handleChange} value={this.state.sheetId} />
           <button className="btn btn-outline-success" type="submit">Abrir</button>
         </form>
       </div>

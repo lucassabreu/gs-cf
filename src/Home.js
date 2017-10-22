@@ -25,7 +25,6 @@ class Home extends Component {
         this.loadNextPage(nextPageToken)
       }
     } catch (e) {
-      console.error(e);
       this.setState({
         loading: false,
         files: [],

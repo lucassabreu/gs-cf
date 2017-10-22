@@ -2,8 +2,9 @@ import React from 'react';
 import Loading from '../Loading';
 import formatMoney from './formatMoney';
 import reduceMovements from './reduceMovements';
+import PropTypes from 'prop-types';
 
-export default function Totals({ loading, movements, className }) {
+function Totals({ loading, movements, className }) {
   let totals = reduceMovements(movements);
 
   if (loading) {
@@ -33,3 +34,11 @@ export default function Totals({ loading, movements, className }) {
     </form>
   );
 }
+
+Totals.propTypes = {
+  loading: PropTypes.bool,
+  movements: PropTypes.array,
+  className: PropTypes.string,
+}
+
+export default Totals

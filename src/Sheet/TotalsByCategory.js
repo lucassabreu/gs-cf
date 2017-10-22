@@ -1,7 +1,8 @@
 import React from 'react';
 import formatMoney from './formatMoney';
+import PropTypes from 'prop-types';
 
-export default function TotalsByCategory({ movements }) {
+function TotalsByCategory({ movements }) {
   let hashMap = movements.reduce((r, m) => {
     if (r[m.category] === undefined) {
       r[m.category] = {
@@ -44,3 +45,9 @@ export default function TotalsByCategory({ movements }) {
     </table>
   );
 }
+
+TotalsByCategory.propTypes = {
+  movements:PropTypes.array,
+}
+
+export default TotalsByCategory

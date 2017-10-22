@@ -17,7 +17,7 @@ const MonthCompare = (props) => <Async load={import('./Sheet/MonthCompare')} com
 const Home = (props) => <Async load={import('./Home')} componentProps={props} />;
 const NoMatch = (props) => <Async load={import('./NoMatch')} componentProps={props} />;
 
-const App = ({ match }) => {
+const App = () => {
   return (
     <div>
       <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
