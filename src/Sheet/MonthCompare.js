@@ -38,7 +38,7 @@ class MonthCompare extends Component {
       startDate: new Date(today.getFullYear(), today.getMonth() - 1, 1, 0, 0, 0),
       endDate: new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0),
       movements: [],
-      activeTab: "movements",
+      activeTab: "comparation",
     };
 
     this.service = new SheetAPIService({
@@ -123,9 +123,9 @@ class MonthCompare extends Component {
         {this.state.loading === STATE.LOADED ?
           <CardBody>
             <Nav className="nav-fill nav-pills">
+              <NavSimpleItem id="comparation" activeTab={this.state.activeTab} toogle={this.toogleTab}>Comparação</NavSimpleItem>
               <NavSimpleItem id="movements" activeTab={this.state.activeTab} toogle={this.toogleTab}>Totais</NavSimpleItem>
               <NavSimpleItem id="months" activeTab={this.state.activeTab} toogle={this.toogleTab}>Mês</NavSimpleItem>
-              <NavSimpleItem id="comparation" activeTab={this.state.activeTab} toogle={this.toogleTab}>Comparação</NavSimpleItem>
             </Nav>
             <TabContent className="card-body" activeTab={this.state.activeTab}>
               <TabPane tabId="movements">
