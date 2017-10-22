@@ -90,9 +90,9 @@ class MonthCompare extends Component {
   handleDateChange(name) {
     return (event) => {
       let parts = event.target.value.split('-');
-      let state = {};
-      state[name] = new Date(parts[0], parseInt(parts[1], 10) - 1, 1, 0, 0, 0);
-      this.setState(state);
+      this.setState({
+        [name]: new Date(parts[0], parseInt(parts[1], 10) - 1, 1, 0, 0, 0),
+      });
     };
   }
 

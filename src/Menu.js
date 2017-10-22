@@ -39,7 +39,7 @@ class Menu extends Component {
   componentWillReceiveProps(newProps) {
     let { location } = (newProps || this.props);
     let match = matchPath(location.pathname, '/sheet/:id');
-    this.setState({ sheetId: match.params.id });
+    this.setState({ sheetId: match ? match.params.id : "" });
   }
 
   render() {

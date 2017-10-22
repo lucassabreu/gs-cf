@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import GoogleAPIService from './Google/GoogleAPIService';
+import PropTypes from 'prop-types';
 
 class Login extends Component {
-  constructor(props, { router }) {
+  static propTypes = {
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    })
+  }
+
+  constructor(props) {
     super(props);
     this.state = {
-      router: router,
+      history: props.history,
     };
 
     this.signIn = this.signIn.bind(this);
@@ -22,7 +29,7 @@ class Login extends Component {
 
   listenOnSignedIn(isSignedIn) {
     if (isSignedIn === true) {
-      this.state.router.push('/')
+      this.state.history.push('/')
     }
   }
 

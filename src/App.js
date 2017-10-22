@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link, withRouter } from 'react-router-dom'
 import Async from 'react-code-splitting'
+import { AuthorizedOnlyAsync } from './Google/AuthorizedOnly';
 import GoogleAPIService from './Google/GoogleAPIService';
 
-// import authorizedOnly from './authorizedOnly';
 import Menu from './Menu'
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -11,11 +11,11 @@ import './App.css';
 
 const Login = (props) => <Async load={import('./Login')} componentProps={props} />;
 
-const SheetHome = (props) => <Async load={import('./SheetHome')} componentProps={props} />;
-const MonthDetail = (props) => <Async load={import('./Sheet/MonthDetail')} componentProps={props} />;
-const MonthCompare = (props) => <Async load={import('./Sheet/MonthCompare')} componentProps={props} />;
+const SheetHome = (props) => <AuthorizedOnlyAsync load={import('./SheetHome')} componentProps={props} />;
+const MonthDetail = (props) => <AuthorizedOnlyAsync load={import('./Sheet/MonthDetail')} componentProps={props} />;
+const MonthCompare = (props) => <AuthorizedOnlyAsync load={import('./Sheet/MonthCompare')} componentProps={props} />;
+const Home = (props) => <AuthorizedOnlyAsync load={import('./Home')} componentProps={props} />;
 
-const Home = (props) => <Async load={import('./Home')} componentProps={props} />;
 const NoMatch = (props) => <Async load={import('./NoMatch')} componentProps={props} />;
 
 class App extends Component {
@@ -25,8 +25,9 @@ class App extends Component {
     this.signOut = this.signOut.bind(this);
   }
 
-  signOut() {
-    GoogleAPIService.signOut();
+  async signOut() {
+    await GoogleAPIService.signOut();
+    this.props.history.push('/login');
   }
 
   render() {
