@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Switch, Route, Link, withRouter } from 'react-router-dom'
 import Async from 'react-code-splitting'
+import GoogleAPIService from './Google/GoogleAPIService';
 
 // import authorizedOnly from './authorizedOnly';
 import Menu from './Menu'
@@ -17,37 +18,49 @@ const MonthCompare = (props) => <Async load={import('./Sheet/MonthCompare')} com
 const Home = (props) => <Async load={import('./Home')} componentProps={props} />;
 const NoMatch = (props) => <Async load={import('./NoMatch')} componentProps={props} />;
 
-const App = () => {
-  return (
-    <div>
-      <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <Link to="/" className="navbar-brand">GS CF</Link>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars"
-          aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
+class App extends Component {
 
-        <Menu signOut={this.signOut} />
-      </nav>
+  constructor(props) {
+    super(props);
+    this.signOut = this.signOut.bind(this);
+  }
 
-      <div className="container-fluid">
-        <div className="row justify-content-center">
-          <main className="col-10 pt-3" role="main">
-            <section className="row">
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/login" component={Login} />
-                <Route exact path="/sheet/:id" component={SheetHome} />
-                <Route exact path="/sheet/:id/compare" component={MonthCompare} />
-                <Route exact path="/sheet/:id/:year-:month" component={MonthDetail} />
-                <Route component={NoMatch} />
-              </Switch>
-            </section>
-          </main>
+  signOut() {
+    GoogleAPIService.signOut();
+  }
+
+  render() {
+    return (
+      <div>
+        <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+          <Link to="/" className="navbar-brand">GS CF</Link>
+          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars"
+            aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          <Menu signOut={this.signOut} />
+        </nav>
+
+        <div className="container-fluid">
+          <div className="row justify-content-center">
+            <main className="col-10 pt-3" role="main">
+              <section className="row">
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                  <Route path="/login" component={Login} />
+                  <Route exact path="/sheet/:id" component={SheetHome} />
+                  <Route exact path="/sheet/:id/compare" component={MonthCompare} />
+                  <Route exact path="/sheet/:id/:year-:month" component={MonthDetail} />
+                  <Route component={NoMatch} />
+                </Switch>
+              </section>
+            </main>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default withRouter(App);
