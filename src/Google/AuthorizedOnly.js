@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import GoogleAPIService from './GoogleAPIService';
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import Async from 'react-code-splitting'
 
-class AuthorizedOnly extends React.Component {
+class _AuthorizedOnly extends Component {
   static propTypes = {
     history: PropTypes.shape({
       push: PropTypes.func,
@@ -25,7 +25,7 @@ class AuthorizedOnly extends React.Component {
   }
 }
 
-AuthorizedOnly = withRouter(AuthorizedOnly);
+let AuthorizedOnly = withRouter(_AuthorizedOnly);
 
 const AuthorizedOnlyAsync = ({ load, componentProps }) => (
   <AuthorizedOnly>

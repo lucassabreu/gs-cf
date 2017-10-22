@@ -3,6 +3,7 @@ import { Switch, Route, Link, withRouter } from 'react-router-dom'
 import Async from 'react-code-splitting'
 import { AuthorizedOnlyAsync } from './Google/AuthorizedOnly';
 import GoogleAPIService from './Google/GoogleAPIService';
+import PropTypes from 'prop-types';
 
 import Menu from './Menu'
 
@@ -19,6 +20,11 @@ const Home = (props) => <AuthorizedOnlyAsync load={import('./Home')} componentPr
 const NoMatch = (props) => <Async load={import('./NoMatch')} componentProps={props} />;
 
 class App extends Component {
+  static propTypes = {
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }),
+  }
 
   constructor(props) {
     super(props);
@@ -62,6 +68,6 @@ class App extends Component {
       </div>
     );
   }
-};
+}
 
 export default withRouter(App);
