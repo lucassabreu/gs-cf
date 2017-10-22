@@ -52,6 +52,11 @@ class GoogleAPIService {
     await promisify(gapi.client.load('drive', 'v3'));
   }
 
+  async initSheetsAPI() {
+    await this.initGoogleAPI();
+    await promisify(gapi.client.load('sheets', 'v4'));
+  }
+
   async initGoogleAPI() {
     await this.loadGAPI();
     await new Promise((f, r) => gapi.load('client:auth2', () => f()));
