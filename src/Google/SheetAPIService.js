@@ -27,7 +27,7 @@ export default class SheetAPIService {
     await GoogleAPIService.initGoogleDriveAPI();
     const data = await promisify(gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: this.sheetId,
-      range: `A:E`,
+      range: "A:E",
     }));
 
     let rows = data.result.values.slice(1);

@@ -53,6 +53,12 @@ class GoogleAPIService {
   }
 
   async initGoogleAPI() {
+    await this.loadGAPI();
+    await new Promise((f, r) => gapi.load('client:auth2', () => f()));
+    await promisify(gapi.client.init(PARAMS));
+  }
+
+  async loadGAPI() {
     await new Promise((f, r) => {
       if (window.gapi) {
         return f();
@@ -60,8 +66,8 @@ class GoogleAPIService {
 
       const script = document.createElement("script");
       script.src = "//apis.google.com/js/api.js";
+      script.onload = (event) => f();
       document.body.append(script);
-      script.onload = () => gapi.load('client:auth2', () => gapi.client.init(PARAMS).then(f, r))
     });
   }
 }

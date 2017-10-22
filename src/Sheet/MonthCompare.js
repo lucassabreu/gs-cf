@@ -10,6 +10,8 @@ import NavSimpleItem from '../NavSimpleItem';
 import { TabContent, TabPane, Nav } from 'reactstrap';
 import PropTypes from 'prop-types';
 
+import './MonthCompare.css';
+
 const STATE = {
   NOT_LOADED: 0,
   LOADING: 1,
@@ -101,9 +103,9 @@ class MonthCompare extends Component {
     let CardBody = ({ children }) => <div className="card-body">{children}</div>
 
     return (
-      <div className="card col-12">
+      <div className="card col-12 MonthCompare">
         <div className="card-body">
-          <form className="form-inline ">
+          <form className="form-inline">
             <div className="form-group">
               <label className="sr-only">Início</label>
               <input type="month" className="form-control" id="start"
