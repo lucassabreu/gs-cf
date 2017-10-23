@@ -38,6 +38,7 @@ class MonthCompare extends Component {
       startDate: new Date(today.getFullYear(), today.getMonth() - 1, 1, 0, 0, 0),
       endDate: new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0),
       movements: [],
+      months: [],
       activeTab: "comparation",
     };
 
@@ -71,20 +72,12 @@ class MonthCompare extends Component {
     let months = (await this.service.getMonthTotals(this.state.startDate, this.state.endDate))
       .sort((n, p) => p.month.getTime() - n.month.getTime());
 
-    let endMonthTotal = months.pop();
-    let startMonthTotal = months.pop();
-
-    if (startMonthTotal === undefined) {
-      startMonthTotal = endMonthTotal;
-    }
-
     this.setState({
       movements: await this.service.getMovements({
         start: this.state.startDate,
         end: this.state.endDate,
       }),
-      startMonthTotal: startMonthTotal,
-      endMonthTotal: endMonthTotal,
+      months: months,
       loading: STATE.LOADED,
     })
   }
@@ -133,10 +126,10 @@ class MonthCompare extends Component {
                 <TotalsByCategory movements={this.state.movements} />
               </TabPane>
               <TabPane tabId="months">
-                <MonthlyTable months={[this.state.startMonthTotal, this.state.endMonthTotal]} sheetId={this.state.sheetId} />
+                <MonthlyTable months={this.state.months} sheetId={this.state.sheetId} />
               </TabPane>
               <TabPane tabId="comparation">
-                <Compare movements={this.state.movements} startMonth={this.state.startMonthTotal} endMonth={this.state.endMonthTotal} />
+                <Compare movements={this.state.movements} months={this.state.months} />
               </TabPane>
             </TabContent>
           </CardBody> : null}

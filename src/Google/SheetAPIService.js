@@ -95,7 +95,7 @@ export default class SheetAPIService {
 
     let dates = []
     for(var d of month) {
-      if (dates.indexOf(d) > 0) {
+      if (dates.indexOf(d) === -1) {
         dates.push(d);
       }
     }
