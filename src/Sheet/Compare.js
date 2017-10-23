@@ -5,7 +5,7 @@ import formatDate from './formatDate';
 import formatMoney from './formatMoney';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
-let CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label }) => {
   if (active === false) {
     return null;
   }
@@ -20,16 +20,43 @@ let CustomTooltip = ({ active, payload, label }) => {
 }
 
 const Compare = ({ movements, startMonth, endMonth }) => {
-  let data = movements.filter(m => m.getValue() !== 0);
+  let hashMap = movements.filter(m => m.getValue() !== 0).reduce(
+    (r, c) => {
+      let key = formatDate(c.date);
+      if (r[key] === undefined) {
+        r[key] = {
+          date: c.date,
+          value: 0,
+          key: key,
+        }
+      }
+
+      r[key].value += c.value;
+      return r;
+    },
+    {}
+  );
+
+  let data = [];
+  for (var key in hashMap) {
+    data.push(hashMap[key]);
+  }
+
+  let runSum = 0;
+  data = data.sort((p, n) => p.date - n.date).map(d => {
+    runSum += d.value;
+    d.runSum = runSum;
+    return d;
+  });
 
   return (
-    <LineChart width={600} height={300} data={data}
-      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-      <XAxis dataKey="id" />
+    <LineChart width={800} height={400} data={data}>
+      <XAxis dataKey="key" />
       <YAxis />
       <Tooltip content={<CustomTooltip />} />
       <Legend />
       <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
+      <Line type="monotone" dataKey="runSum" stroke="#ccc" activeDot={{ r: 8 }} />
     </LineChart>
   );
 }

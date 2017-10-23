@@ -28,7 +28,7 @@ function MonthlyTable({ className, loading, months, sheetId }) {
         </tr>
       </thead>
       <tbody>
-        {months.map((m) => {
+        {months.filter(m => m).map((m) => {
           const lineColor = m.balance > 0 ? 'lineGreen' : 'lineRed';
           return (
             <tr key={m.month} className={lineColor}>
