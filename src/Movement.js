@@ -32,7 +32,8 @@ class Movement {
     if (
       this.category === 'Pagamento de cartão' ||
       this.category === 'Resgate' ||
-      this.category === 'Aplicação'
+      this.category === 'Aplicação' ||
+      this.category === 'Transferência'
     ) {
       return 0;
     }

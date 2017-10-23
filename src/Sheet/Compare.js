@@ -3,22 +3,27 @@ import PropTypes from 'prop-types';
 
 import formatDate from './formatDate';
 import formatMoney from './formatMoney';
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 
 const CustomTooltip = ({ active, payload }) => {
   if (active === false) {
     return null;
   }
 
+  if (payload === null) {
+    return null;
+  }
+
   let data = payload[0].payload;
   return (
     <div className="custom-tooltip">
-      <p className="label">
-        Valor ({formatDate(data.date)}): {formatMoney(data["Valor Movimento"], 2, ',', '.')}
-      </p>
-      <p className="label">
-        Acumulado ({formatDate(data.date)}): {formatMoney(data["Acumulado"], 2, ',', '.')}
-      </p>
+      <strong>{formatDate(data.date)}:</strong>
+      <dl>
+        <dt>Valor:</dt>
+        <dd>{formatMoney(data["Valor"], 2, ',', '.')}</dd>
+        <dt>Acumulado:</dt>
+        <dd>{formatMoney(data["Acumulado"], 2, ',', '.')}</dd>
+      </dl>
     </div>
   );
 }
@@ -28,59 +33,109 @@ CustomTooltip.propTypes = {
   payload: PropTypes.arrayOf(PropTypes.any),
 }
 
-const Compare = ({ movements, months }) => {
-  let hashMap = movements.filter(m => m.getValue() !== 0).reduce(
-    (r, c) => {
-      let key = formatDate(c.date);
-      if (r[key] === undefined) {
-        r[key] = {
-          date: c.date,
-          "Valor Movimento": 0,
-          key: key,
-        }
-      }
+const activeDot = { r: 8 };
+const Chart = ({ title, data }) => (
+  <div className="card">
+    <div className="card-header">{title}</div>
+    <div className="card-body">
+      <ResponsiveContainer width="100%" height={400}>
+        <AreaChart data={data}>
+          <XAxis dataKey="key" />
+          <YAxis />
 
-      r[key]["Valor Movimento"] += c.value;
-      return r;
-    },
-    {}
-  );
+          <Area type="monotone" dataKey="Valor" stroke="#8884d8"
+            activeDot={activeDot} fill="#8884d8" />
+          <Area type="monotone" dataKey="Acumulado" stroke="#82ca9d"
+            activeDot={activeDot} fill="#82ca9d" />
 
-  let data = [];
-  for (var key in hashMap) {
-    data.push(hashMap[key]);
+          <CartesianGrid strokeDasharray="3 3" />
+          <Legend />
+          <Tooltip content={<CustomTooltip />} />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  </div>
+)
+
+class Compare extends React.PureComponent {
+  static propTypes = {
+    movements: PropTypes.arrayOf(PropTypes.shape({
+      date: PropTypes.date,
+      value: PropTypes.number,
+      getValue: PropTypes.func,
+    })),
+    months: PropTypes.array,
   }
 
-  let startMonthTotal = months.slice(0, 1).pop()
-  let runSum = startMonthTotal.initial;
-  data = data.sort((p, n) => p.date - n.date).map(d => {
-    runSum += d["Valor Movimento"];
-    d["Acumulado"] = runSum;
-    return d;
-  });
+  render() {
+    let { movements, months } = this.props;
 
-  return (
-    <LineChart width={1000} height={400} data={data}>
-      <XAxis dataKey="key" />
-      <YAxis />
+    const extract = (hash) => {
+      let data = [];
+      for (let key in hash) {
+        data.push(hash[key]);
+      }
+      return data;
+    }
 
-      <Line type="monotone" dataKey="Valor Movimento" stroke="#8884d8" activeDot={{ r: 8 }} />
-      <Line type="monotone" dataKey="Acumulado" stroke="#ccc" activeDot={{ r: 8 }} />
+    let data = extract(
+      movements.filter(m => m.getValue() !== 0).reduce(
+        (r, c) => {
+          let key = formatDate(c.date);
+          if (r[key] === undefined) {
+            r[key] = {
+              date: c.date,
+              "Valor": 0,
+              key: key,
+            }
+          }
 
-      <CartesianGrid strokeDasharray="3 3" />
-      <Legend />
-      <Tooltip content={<CustomTooltip />} />
-    </LineChart>
-  );
-}
+          r[key]["Valor"] += c.value;
+          return r;
+        },
+        {}
+      )
+    );
 
-Compare.propTypes = {
-  movements: PropTypes.arrayOf(PropTypes.shape({
-    date: PropTypes.date,
-    value: PropTypes.number,
-    getValue: PropTypes.func,
-  })),
-  months: PropTypes.array,
+    let startMonthTotal = months.slice(0, 1).pop()
+    let runSum = startMonthTotal.initial;
+    data = data.sort((p, n) => p.date - n.date).map(d => {
+      d["Acumulado"] = runSum += d["Valor"];
+      return d;
+    });
+
+    let monthsData = extract(
+      data.reduce(
+        (r, c) => {
+          let key = (c.date.getFullYear() * 1000) + c.date.getMonth();
+          if (r[key] === undefined) {
+            r[key] = {
+              date: new Date(c.date.getFullYear(), c.date.getMonth(), 1),
+              Valor: 0,
+            }
+          }
+
+          r[key].Valor += c.Valor;
+          return r;
+        },
+        {}
+      )
+    );
+
+    runSum = 0;
+    monthsData = monthsData.map(m => {
+      runSum += m.Valor;
+      m.Acumulado = runSum;
+      return m;
+    });
+
+    return (
+      <div>
+        <Chart title="Meses" data={monthsData} />
+        <Chart title="Diário" data={data} />
+      </div>
+    );
+  }
 }
 
 export default Compare;
