@@ -1,0 +1,11 @@
+.MonthCompare .form-inline {
+  display: flex;
+}
+
+.MonthCompare .form-inline .form-group {
+  flex-grow: 2;
+}
+
+.MonthCompare .form-inline .form-group input[type=month] {
+  width: 100%;
+}

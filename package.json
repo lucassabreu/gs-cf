@@ -3,14 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "inferno": "^3.9.0",
-    "inferno-component": "^3.9.0",
-    "inferno-scripts": "4.2.0"
+    "bootstrap": "^4.0.0-beta",
+    "jquery": "^3.2.1",
+    "popper.js": "^1.12.5",
+    "react": "^16.0.0",
+    "react-code-splitting": "^1.2.1",
+    "react-dom": "^16.0.0",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.0.14",
+    "react-transition-group": "^2.2.1",
+    "reactstrap": "^4.8.0",
+    "recharts": "^1.0.0-alpha.6"
   },
   "scripts": {
-    "start": "inferno-scripts start",
-    "build": "inferno-scripts build",
-    "test": "inferno-scripts test --env=jsdom",
-    "eject": "inferno-scripts eject"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "lint": "esw webpack.config.* registerServiceWorker.js src tools --color",
+    "lint:watch": "npm run lint -- --watch"
+  },
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-plugin-react": "^7.4.0",
+    "eslint-watch": "^3.1.3"
   }
 }
