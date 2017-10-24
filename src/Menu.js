@@ -52,6 +52,9 @@ class Menu extends Component {
             </li>
           }
           <li className="nav-item">
+            <Link className="btn nav-link" to={`/import-script`}>Import Script</Link>
+          </li>
+          <li className="nav-item">
             <span className="btn nav-link" onClick={this.props.signOut}>Logout</span>
           </li>
         </ul>

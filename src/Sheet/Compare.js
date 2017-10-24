@@ -35,7 +35,7 @@ CustomTooltip.propTypes = {
 
 const activeDot = { r: 8 };
 const Chart = ({ title, data }) => (
-  <div className="card">
+  <div className="card mb-3">
     <div className="card-header">{title}</div>
     <div className="card-body">
       <ResponsiveContainer width="100%" height={400}>
@@ -56,6 +56,15 @@ const Chart = ({ title, data }) => (
     </div>
   </div>
 )
+
+Chart.propTypes = {
+  title: PropTypes.string,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    date: PropTypes.date,
+    Valor: PropTypes.number,
+    Acumulado: PropTypes.number,
+  })),
+}
 
 class Compare extends React.PureComponent {
   static propTypes = {
@@ -79,7 +88,7 @@ class Compare extends React.PureComponent {
     }
 
     let data = extract(
-      movements.filter(m => m.getValue() !== 0).reduce(
+      movements.reduce(
         (r, c) => {
           let key = formatDate(c.date);
           if (r[key] === undefined) {
@@ -122,7 +131,7 @@ class Compare extends React.PureComponent {
       )
     );
 
-    runSum = 0;
+    runSum = startMonthTotal.initial;
     monthsData = monthsData.map(m => {
       runSum += m.Valor;
       m.Acumulado = runSum;
