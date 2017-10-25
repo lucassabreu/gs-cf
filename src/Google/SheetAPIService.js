@@ -88,8 +88,15 @@ export default class SheetAPIService {
     ));
   }
 
-  async getMonths({ start, end }) {
+  async getMonths({ start, end, month }) {
     let months = this.reduceToMonth(await this.getMovements({}));
+
+    if (month) {
+      months = months.filter(m => (
+        m.month.getFullYear() === month.getFullYear() &&
+        m.month.getMonth() === month.getMonth()
+      ));
+    }
 
     if (start) {
       months = months.filter(m => m.month >= start);

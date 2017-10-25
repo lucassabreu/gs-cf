@@ -10,6 +10,8 @@ import NavSimpleItem from '../NavSimpleItem';
 import { TabContent, TabPane, Nav } from 'reactstrap';
 import PropTypes from 'prop-types';
 
+import './MonthDetail.css';
+
 class MonthDetail extends Component {
   static propTypes = {
     match: PropTypes.shape({
@@ -23,9 +25,9 @@ class MonthDetail extends Component {
 
     this.state = {
       sheetId: params.id,
-      month: new Date(params.year, params.month - 1),
+      monthDate: new Date(params.year, params.month, 0),
       loading: true,
-      movements: [],
+      month: null,
       activeTab: "movements",
     };
 
@@ -48,9 +50,7 @@ class MonthDetail extends Component {
     if (this.state.loading) {
       this.setState({
         loading: false,
-        movements: await this.service.getMovements({
-          month: this.state.month
-        }),
+        month: (await this.service.getMonths({ month: this.state.monthDate })).pop(),
       });
     }
   }
@@ -64,21 +64,37 @@ class MonthDetail extends Component {
       </div>;
     }
 
+    let { initial, movements } = this.state.month;
+
+    let runSum = initial;
+    let dailyRunSum = 0;
+    let lastDate = null;
+    let dayCount = 0;
     let line = (movement) => {
+      if (lastDate === null || lastDate.getTime() !== movement.date.getTime()) {
+        dayCount++;
+        lastDate = movement.date;
+        dailyRunSum = 0;
+      }
+
+      runSum += movement.value;
+      dailyRunSum += movement.value;
       return (
-        <tr key={movement.id}>
+        <tr key={movement.id} className={dayCount % 2 ? 'even' : 'odd'}>
           <td>{formatDate(movement.date)}</td>
           <td>{movement.category}</td>
           <td>{movement.description}</td>
           <td className="text-right">{formatMoney(movement.value, 2, ',', '.')}</td>
           <td>{movement.origin}</td>
+          <td className="text-right">{formatMoney(dailyRunSum, 2, ',', '.')}</td>
+          <td className="text-right">{formatMoney(runSum, 2, ',', '.')}</td>
         </tr>
       );
     }
 
     return (
-      <div className="card col-12">
-        <Totals className="card-body" movements={this.state.movements.filter(m => m.getValue() !== 0)} />
+      <div className="card col-12 MonthDetail">
+        <Totals className="card-body" movements={movements.filter(m => m.getValue() !== 0)} />
         <Nav className="card-body nav-pills nav-fill">
           <NavSimpleItem id="movements" activeTab={this.state.activeTab} toogle={this.toogleTab}>
             Totais
@@ -97,15 +113,16 @@ class MonthDetail extends Component {
                   <th>Descrição</th>
                   <th className="text-right">Valor</th>
                   <th>Origem</th>
+                  <th colSpan="2" className="text-right">Acumulado</th>
                 </tr>
               </thead>
               <tbody>
-                {this.state.movements.map(line)}
+                {movements.map(line)}
               </tbody>
             </table>
           </TabPane>
           <TabPane tabId="categories">
-            <TotalsByCategory movements={this.state.movements} />
+            <TotalsByCategory movements={movements} />
           </TabPane>
         </TabContent>
       </div>

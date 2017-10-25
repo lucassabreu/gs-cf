@@ -20,7 +20,7 @@ class Movement {
   }
 
   getMonth() {
-    return new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+    return new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
   }
 
   getMonthString() {
