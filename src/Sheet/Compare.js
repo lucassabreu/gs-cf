@@ -6,11 +6,7 @@ import formatMoney from './formatMoney';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 
 const CustomTooltip = ({ active, payload }) => {
-  if (active === false) {
-    return null;
-  }
-
-  if (payload === null) {
+  if (active === false || payload === null) {
     return null;
   }
 
@@ -19,8 +15,8 @@ const CustomTooltip = ({ active, payload }) => {
     <div className="custom-tooltip">
       <strong>{formatDate(data.date)}:</strong>
       <dl>
-        <dt>Valor:</dt>
-        <dd>{formatMoney(data["Valor"], 2, ',', '.')}</dd>
+        <dt>Balanço:</dt>
+        <dd>{formatMoney(data["Balanço"], 2, ',', '.')}</dd>
         <dt>Acumulado:</dt>
         <dd>{formatMoney(data["Acumulado"], 2, ',', '.')}</dd>
       </dl>
@@ -43,7 +39,7 @@ const Chart = ({ title, data }) => (
           <XAxis dataKey="key" />
           <YAxis />
 
-          <Area type="monotone" dataKey="Valor" stroke="#8884d8"
+          <Area type="monotone" dataKey="Balanço" stroke="#8884d8"
             activeDot={activeDot} fill="#8884d8" />
           <Area type="monotone" dataKey="Acumulado" stroke="#82ca9d"
             activeDot={activeDot} fill="#82ca9d" />
@@ -61,7 +57,7 @@ Chart.propTypes = {
   title: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.shape({
     date: PropTypes.date,
-    Valor: PropTypes.number,
+    Balanço: PropTypes.number,
     Acumulado: PropTypes.number,
   })),
 }
@@ -94,12 +90,12 @@ class Compare extends React.PureComponent {
           if (r[key] === undefined) {
             r[key] = {
               date: c.date,
-              "Valor": 0,
+              "Balanço": 0,
               key: key,
             }
           }
 
-          r[key]["Valor"] += c.value;
+          r[key]["Balanço"] += c.value;
           return r;
         },
         {}
@@ -109,34 +105,16 @@ class Compare extends React.PureComponent {
     let startMonthTotal = months.slice(0, 1).pop()
     let runSum = startMonthTotal.initial;
     data = data.sort((p, n) => p.date - n.date).map(d => {
-      d["Acumulado"] = runSum += d["Valor"];
+      d["Acumulado"] = runSum += d["Balanço"];
       return d;
     });
 
-    let monthsData = extract(
-      data.reduce(
-        (r, c) => {
-          let key = (c.date.getFullYear() * 1000) + c.date.getMonth();
-          if (r[key] === undefined) {
-            r[key] = {
-              date: new Date(c.date.getFullYear(), c.date.getMonth(), 1),
-              Valor: 0,
-            }
-          }
-
-          r[key].Valor += c.Valor;
-          return r;
-        },
-        {}
-      )
-    );
-
-    runSum = startMonthTotal.initial;
-    monthsData = monthsData.map(m => {
-      runSum += m.Valor;
-      m.Acumulado = runSum;
-      return m;
-    });
+    let monthsData = months.map(m => ({
+      date: m.month,
+      "Balanço": m.balance,
+      Acumulado: m.final,
+    }))
+      .sort((p, n) => p.date - n.date);
 
     return (
       <div>

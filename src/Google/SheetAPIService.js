@@ -88,27 +88,19 @@ export default class SheetAPIService {
     ));
   }
 
-  /**
-   * @param {array<Date>} month 
-   */
-  async getMonthTotals(...month) {
+  async getMonths({ start, end }) {
+    let months = this.reduceToMonth(await this.getMovements({}));
 
-    let dates = []
-    for(var d of month) {
-      if (dates.indexOf(d) === -1) {
-        dates.push(d);
-      }
+    if (start) {
+      months = months.filter(m => m.month >= start);
     }
 
-    let months = await this.getMonths();
-    return months.filter(mov => (
-      dates.filter(m => mov.month.getFullYear() === m.getFullYear() && mov.month.getMonth() === m.getMonth()).length > 0
-    ));
-  }
-
-  async getMonths() {
-    let movements = await this.getMovements({});
-    return this.reduceToMonth(movements);
+    if (end) {
+      end = new Date(end.getTime());
+      end = new Date(end.setMonth(end.getMonth() + 1));
+      months = months.filter(m => m.month < end);
+    }
+    return months;
   }
 
   reduceToMonth(movements) {

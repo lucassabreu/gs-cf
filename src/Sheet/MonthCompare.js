@@ -69,15 +69,14 @@ class MonthCompare extends Component {
 
     this.setState({ loading: STATE.LOADING });
 
-    let months = (await this.service.getMonthTotals(this.state.startDate, this.state.endDate))
-      .sort((n, p) => p.month.getTime() - n.month.getTime());
+    let filter = {
+      start: this.state.startDate,
+      end: this.state.endDate,
+    };
 
     this.setState({
-      movements: await this.service.getMovements({
-        start: this.state.startDate,
-        end: this.state.endDate,
-      }),
-      months: months,
+      movements: await this.service.getMovements(filter),
+      months: await this.service.getMonths(filter),
       loading: STATE.LOADED,
     })
   }

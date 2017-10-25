@@ -49,7 +49,7 @@ class SheetHome extends Component {
   async updateMovements() {
     this.setState({
       movements: await this.service.getMovements({}),
-      months: await this.service.getMonths(),
+      months: await this.service.getMonths({}),
       loading: false,
     });
   }
