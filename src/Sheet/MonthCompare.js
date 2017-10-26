@@ -5,6 +5,7 @@ import Totals from './Totals';
 import TotalsByCategory from './TotalsByCategory';
 import MonthlyTable from './MonthlyTable';
 import Compare from './Compare';
+import MovementsTable from './MovementsTable';
 
 import NavSimpleItem from '../NavSimpleItem';
 import { TabContent, TabPane, Nav } from 'reactstrap';
@@ -94,6 +95,8 @@ class MonthCompare extends Component {
     let formatToMonth = (date) => date.getFullYear() + '-' + (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1);
     let CardBody = ({ children }) => <div className="card-body">{children}</div>
 
+    let firstMonth = this.state.months.slice(0, 1).pop();
+
     return (
       <div className="card col-12 MonthCompare">
         <div className="card-body">
@@ -116,11 +119,12 @@ class MonthCompare extends Component {
           <CardBody>
             <Nav className="nav-fill nav-pills">
               <NavSimpleItem id="comparation" activeTab={this.state.activeTab} toogle={this.toogleTab}>Comparação</NavSimpleItem>
-              <NavSimpleItem id="movements" activeTab={this.state.activeTab} toogle={this.toogleTab}>Totais</NavSimpleItem>
+              <NavSimpleItem id="totals" activeTab={this.state.activeTab} toogle={this.toogleTab}>Totais</NavSimpleItem>
               <NavSimpleItem id="months" activeTab={this.state.activeTab} toogle={this.toogleTab}>Mês</NavSimpleItem>
+              <NavSimpleItem id="movements" activeTab={this.state.activeTab} toogle={this.toogleTab}>Movimentos</NavSimpleItem>
             </Nav>
             <TabContent className="card-body" activeTab={this.state.activeTab}>
-              <TabPane tabId="movements">
+              <TabPane tabId="totals">
                 <Totals movements={this.state.movements} />
                 <TotalsByCategory movements={this.state.movements} />
               </TabPane>
@@ -129,6 +133,9 @@ class MonthCompare extends Component {
               </TabPane>
               <TabPane tabId="comparation">
                 <Compare movements={this.state.movements} months={this.state.months} />
+              </TabPane>
+              <TabPane tabId="movements">
+                <MovementsTable firstMonth={firstMonth} movements={this.state.movements} />
               </TabPane>
             </TabContent>
           </CardBody> : null}

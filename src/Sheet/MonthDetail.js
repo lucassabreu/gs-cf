@@ -3,14 +3,11 @@ import SheetAPIService from '../Google/SheetAPIService';
 import Loading from '../Loading';
 import Totals from './Totals';
 import TotalsByCategory from './TotalsByCategory';
-import formatDate from './formatDate';
-import formatMoney from './formatMoney';
+import MovementsTable from './MovementsTable';
 
 import NavSimpleItem from '../NavSimpleItem';
 import { TabContent, TabPane, Nav } from 'reactstrap';
 import PropTypes from 'prop-types';
-
-import './MonthDetail.css';
 
 class MonthDetail extends Component {
   static propTypes = {
@@ -64,34 +61,7 @@ class MonthDetail extends Component {
       </div>;
     }
 
-    let { initial, movements } = this.state.month;
-
-    let runSum = initial;
-    let dailyRunSum = 0;
-    let lastDate = null;
-    let dayCount = 0;
-    let line = (movement) => {
-      if (lastDate === null || lastDate.getTime() !== movement.date.getTime()) {
-        dayCount++;
-        lastDate = movement.date;
-        dailyRunSum = 0;
-      }
-
-      runSum += movement.value;
-      dailyRunSum += movement.value;
-      return (
-        <tr key={movement.id} className={dayCount % 2 ? 'even' : 'odd'}>
-          <td>{formatDate(movement.date)}</td>
-          <td>{movement.category}</td>
-          <td>{movement.description}</td>
-          <td className="text-right">{formatMoney(movement.value, 2, ',', '.')}</td>
-          <td>{movement.origin}</td>
-          <td className="text-right">{formatMoney(dailyRunSum, 2, ',', '.')}</td>
-          <td className="text-right">{formatMoney(runSum, 2, ',', '.')}</td>
-        </tr>
-      );
-    }
-
+    let { movements } = this.state.month;
     return (
       <div className="card col-12 MonthDetail">
         <Totals className="card-body" movements={movements.filter(m => m.getValue() !== 0)} />
@@ -105,21 +75,7 @@ class MonthDetail extends Component {
         </Nav>
         <TabContent className="card-body" activeTab={this.state.activeTab}>
           <TabPane tabId="movements">
-            <table className="table table-sm">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Categoria</th>
-                  <th>Descrição</th>
-                  <th className="text-right">Valor</th>
-                  <th>Origem</th>
-                  <th colSpan="2" className="text-right">Acumulado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {movements.map(line)}
-              </tbody>
-            </table>
+            <MovementsTable firstMonth={this.state.month} movements={this.state.month.movements || []} />
           </TabPane>
           <TabPane tabId="categories">
             <TotalsByCategory movements={movements} />

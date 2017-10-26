@@ -5,8 +5,6 @@ import formatDate from './formatDate';
 import formatMoney from './formatMoney';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 
-const sortFunc = (p, n) => p.date.getTime() - n.date.getTime();
-
 const CustomTooltip = ({ active, payload }) => {
   if (active === false || payload === null) {
     return null;
@@ -74,18 +72,20 @@ class Compare extends React.PureComponent {
     months: PropTypes.array,
   }
 
+  sortFunc = (p, n) => p.date.getTime() - n.date.getTime();
+
+  extract(hash) {
+    let data = [];
+    for (let key in hash) {
+      data.push(hash[key]);
+    }
+    return data;
+  }
+
   render() {
     let { movements, months } = this.props;
 
-    const extract = (hash) => {
-      let data = [];
-      for (let key in hash) {
-        data.push(hash[key]);
-      }
-      return data;
-    }
-
-    let data = extract(
+    let data = this.extract(
       movements.reduce(
         (r, c) => {
           let key = formatDate(c.date);
@@ -106,7 +106,7 @@ class Compare extends React.PureComponent {
 
     let startMonthTotal = months.slice(0, 1).pop()
     let runSum = startMonthTotal.initial;
-    data = data.sort(sortFunc).map(d => {
+    data = data.sort(this.sortFunc).map(d => {
       runSum += d["Balanço"];
       d["Acumulado"] = runSum;
       return d;
@@ -117,7 +117,7 @@ class Compare extends React.PureComponent {
       "Balanço": m.balance,
       Acumulado: m.final,
     }))
-      .sort(sortFunc);
+      .sort(this.sortFunc);
 
     return (
       <div>

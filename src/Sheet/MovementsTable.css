@@ -1,0 +1,7 @@
+.MovementsTable .even {
+  background: #fff;
+}
+
+.MovementsTable .odd {
+  background: #ddd;  
+}
