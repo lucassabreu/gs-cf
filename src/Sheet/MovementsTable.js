@@ -58,7 +58,7 @@ MovementsTable.propTypes = {
     initial: PropTypes.number,
   }),
   movements: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     date: PropTypes.date,
     category: PropTypes.category,
     description: PropTypes.string,

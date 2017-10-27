@@ -13,7 +13,7 @@ function MonthlyTable({ className, loading, months, sheetId }) {
     return <Loading />
   }
 
-  months = months.sort((p, n) => n.month - p.month);
+  months = months.concat().sort((p, n) => n.month - p.month);
   return (
     <table className={className + " monthlyTable table table-sm"}>
       <thead>
