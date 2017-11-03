@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route, Link, withRouter } from 'react-router-dom'
+import { Switch, Route, Link, withRouter, Redirect } from 'react-router-dom'
 import Async from 'react-code-splitting'
 import { AuthorizedOnlyAsync } from './Google/AuthorizedOnly';
 import GoogleAPIService from './Google/GoogleAPIService';
@@ -55,12 +55,13 @@ class App extends Component {
             <main className="col-10 pt-3" role="main">
               <section className="row">
                 <Switch>
-                  <Route exact path="/" component={Home} />
-                  <Route path="/login" component={Login} />
-                  <Route path="/import-script" component={ImportScript} />
-                  <Route exact path="/sheet/:id" component={SheetHome} />
-                  <Route exact path="/sheet/:id/compare" component={MonthCompare} />
-                  <Route exact path="/sheet/:id/:year-:month" component={MonthDetail} />
+                  <Redirect exact path="/" to="/gs-cf/" />
+                  <Route exact path="/gs-cf/" component={Home} />
+                  <Route path="/gs-cf/login" component={Login} />
+                  <Route path="/gs-cf/import-script" component={ImportScript} />
+                  <Route exact path="/gs-cf/sheet/:id" component={SheetHome} />
+                  <Route exact path="/gs-cf/sheet/:id/compare" component={MonthCompare} />
+                  <Route exact path="/gs-cf/sheet/:id/:year-:month" component={MonthDetail} />
                   <Route component={NoMatch} />
                 </Switch>
               </section>
