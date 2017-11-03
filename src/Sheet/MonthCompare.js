@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SheetAPIService from '../Google/SheetAPIService';
 import Loading from '../Loading';
 import Totals from './Totals';
-import TotalsByCategory from './TotalsByCategory';
+import CategoryTotalsByMonth from './CategoryTotalsByMonth';
 import MonthlyTable from './MonthlyTable';
 import Compare from './Compare';
 import MovementsTable from './MovementsTable';
@@ -126,7 +126,7 @@ class MonthCompare extends Component {
             <TabContent className="card-body" activeTab={this.state.activeTab}>
               <TabPane tabId="totals">
                 <Totals movements={this.state.movements} />
-                <TotalsByCategory movements={this.state.movements} />
+                <CategoryTotalsByMonth movements={this.state.movements} />
               </TabPane>
               <TabPane tabId="months">
                 <MonthlyTable months={this.state.months} sheetId={this.state.sheetId} />
