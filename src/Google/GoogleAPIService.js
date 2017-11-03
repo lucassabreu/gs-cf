@@ -59,7 +59,10 @@ class GoogleAPIService {
 
   async initGoogleAPI() {
     await this.loadGAPI();
-    await new Promise((f, r) => gapi.load('client:auth2', () => f()));
+    await new Promise((f, r) => gapi.load('client:auth2', {
+      callback: f,
+      onerror: r,
+    }));
     await promisify(gapi.client.init(PARAMS));
   }
 
@@ -71,7 +74,8 @@ class GoogleAPIService {
 
       const script = document.createElement("script");
       script.src = "//apis.google.com/js/api.js";
-      script.onload = (event) => f();
+      script.onload = f;
+      script.onerror = r;
       document.body.append(script);
     });
   }

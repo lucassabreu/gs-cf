@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
 const Login = (props) => <Async load={import('./Login')} componentProps={props} />;
+const ImportScript = (props) => <Async load={import('./ImportScript')} componentProps={props} />;
 
 const SheetHome = (props) => <AuthorizedOnlyAsync load={import('./SheetHome')} componentProps={props} />;
 const MonthDetail = (props) => <AuthorizedOnlyAsync load={import('./Sheet/MonthDetail')} componentProps={props} />;
@@ -56,6 +57,7 @@ class App extends Component {
                 <Switch>
                   <Route exact path="/" component={Home} />
                   <Route path="/login" component={Login} />
+                  <Route path="/import-script" component={ImportScript} />
                   <Route exact path="/sheet/:id" component={SheetHome} />
                   <Route exact path="/sheet/:id/compare" component={MonthCompare} />
                   <Route exact path="/sheet/:id/:year-:month" component={MonthDetail} />

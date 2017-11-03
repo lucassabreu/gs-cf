@@ -3,8 +3,7 @@ import SheetAPIService from '../Google/SheetAPIService';
 import Loading from '../Loading';
 import Totals from './Totals';
 import TotalsByCategory from './TotalsByCategory';
-import formatDate from './formatDate';
-import formatMoney from './formatMoney';
+import MovementsTable from './MovementsTable';
 
 import NavSimpleItem from '../NavSimpleItem';
 import { TabContent, TabPane, Nav } from 'reactstrap';
@@ -23,9 +22,9 @@ class MonthDetail extends Component {
 
     this.state = {
       sheetId: params.id,
-      month: new Date(params.year, params.month - 1),
+      monthDate: new Date(params.year, params.month, 0),
       loading: true,
-      movements: [],
+      month: null,
       activeTab: "movements",
     };
 
@@ -48,9 +47,7 @@ class MonthDetail extends Component {
     if (this.state.loading) {
       this.setState({
         loading: false,
-        movements: await this.service.getMovements({
-          month: this.state.month
-        }),
+        month: (await this.service.getMonths({ month: this.state.monthDate })).pop(),
       });
     }
   }
@@ -64,21 +61,10 @@ class MonthDetail extends Component {
       </div>;
     }
 
-    let line = (movement) => {
-      return (
-        <tr key={movement.id}>
-          <td>{formatDate(movement.date)}</td>
-          <td>{movement.category}</td>
-          <td>{movement.description}</td>
-          <td className="text-right">{formatMoney(movement.value, 2, ',', '.')}</td>
-          <td>{movement.origin}</td>
-        </tr>
-      );
-    }
-
+    let { movements } = this.state.month;
     return (
-      <div className="card col-12">
-        <Totals className="card-body" movements={this.state.movements.filter(m => m.getValue() !== 0)} />
+      <div className="card col-12 MonthDetail">
+        <Totals className="card-body" movements={movements.filter(m => m.getValue() !== 0)} />
         <Nav className="card-body nav-pills nav-fill">
           <NavSimpleItem id="movements" activeTab={this.state.activeTab} toogle={this.toogleTab}>
             Totais
@@ -89,23 +75,10 @@ class MonthDetail extends Component {
         </Nav>
         <TabContent className="card-body" activeTab={this.state.activeTab}>
           <TabPane tabId="movements">
-            <table className="table table-sm">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Categoria</th>
-                  <th>Descrição</th>
-                  <th className="text-right">Valor</th>
-                  <th>Origem</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.movements.map(line)}
-              </tbody>
-            </table>
+            <MovementsTable firstMonth={this.state.month} movements={this.state.month.movements || []} />
           </TabPane>
           <TabPane tabId="categories">
-            <TotalsByCategory movements={this.state.movements} />
+            <TotalsByCategory movements={movements} />
           </TabPane>
         </TabContent>
       </div>
