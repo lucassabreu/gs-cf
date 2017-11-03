@@ -1,7 +1,7 @@
 {
   "name": "gs-cf",
   "version": "0.1.0",
-  "homepage": "http://www.lucassabreu.net.br/gs-cf",
+  "homepage": "http://gs-cf.lucassabreu.net.br/",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.0.0-beta",
