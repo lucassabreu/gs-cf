@@ -11,11 +11,11 @@ const Menu = ({ location, signOut }) => {
       <ul className="navbar-nav mr-auto">
         {sheetId.length === 0 ? null :
           <li className="nav-item">
-            <Link className="btn nav-link" to={`/sheet/${sheetId}/compare`}>Compare</Link>
+            <Link className="btn nav-link" to={`/gs-cf/sheet/${sheetId}/compare`}>Compare</Link>
           </li>
         }
         <li className="nav-item">
-          <Link className="btn nav-link" to="/import-script">Import Script</Link>
+          <Link className="btn nav-link" to="/gs-cf/import-script">Import Script</Link>
         </li>
         <li className="nav-item">
           <span className="btn nav-link" onClick={signOut}>Logout</span>
