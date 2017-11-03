@@ -47,7 +47,7 @@ class Home extends Component {
         <ul className="list-group list-group-flush">
           {this.state.files.map((f) => (
             <li key={f.id} className="list-group-item">
-              <Link to={'/gs-cf/sheet/' + f.id}>{f.name}</Link>
+              <Link to={'/sheet/' + f.id}>{f.name}</Link>
             </li>
           ))}
         </ul>

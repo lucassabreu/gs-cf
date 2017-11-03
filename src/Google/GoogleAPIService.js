@@ -3,7 +3,7 @@
 import promisify from './promisify';
 
 const PARAMS = {
-  apiKey: 'AIzaSyCZ5_w5a91cUJVYStFGouS4ffbVgzkBk_E',
+  apiKey: 'AIzaSyDZKg6zY7dqtQP8S_SafPvDUbyXtG6WC9E',
   clientId: '723341089127-thkukv2q6u8vfithe30h1qciemdhasae.apps.googleusercontent.com',
   discoveryDocs: [
     'https://sheets.googleapis.com/$discovery/rest?version=v4',

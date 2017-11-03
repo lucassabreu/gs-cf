@@ -39,7 +39,7 @@ function MonthlyTable({ className, loading, months, sheetId }) {
               <td className="text-right">{formatMoney(m.balance, 2, ',', '.')}</td>
               <td className="text-right">{formatMoney(m.final, 2, ',', '.')}</td>
               <td>
-                <Link to={`/gs-cf/sheet/${sheetId}/${yearMonth(m.month)}`}>
+                <Link to={`/sheet/${sheetId}/${yearMonth(m.month)}`}>
                   <i className="material-icons">list</i>
                 </Link>
               </td>
