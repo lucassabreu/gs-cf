@@ -3,8 +3,8 @@
 import promisify from './promisify';
 
 const PARAMS = {
-  apiKey: 'AIzaSyDZKg6zY7dqtQP8S_SafPvDUbyXtG6WC9E',
-  clientId: '723341089127-thkukv2q6u8vfithe30h1qciemdhasae.apps.googleusercontent.com',
+  apiKey: 'AIzaSyCE9M0o3QzQzCPMoWf6WwFa9hrJ_GqfPaM',
+  clientId: '723341089127-5ejivrd32lqg8m3ns4njdnfsj4v74qs4.apps.googleusercontent.com',
   discoveryDocs: [
     'https://sheets.googleapis.com/$discovery/rest?version=v4',
     'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
