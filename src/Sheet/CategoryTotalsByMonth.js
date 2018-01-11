@@ -39,7 +39,7 @@ function CategoryTotalsByMonth({ movements }) {
     .map(c => {
       c.months = extract(c.months).sort((p, n) => p.value - n.value);
       c.avg = c.months.reduce((r, m) => r + (m.value / c.months.length), 0)
-      c.median = c.months[parseInt(c.months.length / 2)].value;
+      c.median = c.months[parseInt(c.months.length / 2, 10)].value;
       return c;
     })
     .sort((n, p) => Math.abs(p.value) - Math.abs(n.value));
