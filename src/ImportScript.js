@@ -10,24 +10,19 @@ const ImportScript = () => (
 )
 
 const script = highlightAuto(`
-var NUBANK=6904169;
-var ITAU_CORRENTE=8252244;
-var ITAU_POUPANCA=8333370;
-var BRADESCO_CORRENTE=7942759;
-var BRADESCO_POUPANCA=7942760;
-var HSBC_CORRENTE=6903850;
-var HSBC_POUPANCA=6903853;
-var MANUAL=6904445;
-
 var originList = [];
-originList[NUBANK]='Nubank';
-originList[ITAU_CORRENTE]='Corrente';
-originList[ITAU_POUPANCA]='Poupança';
-originList[BRADESCO_CORRENTE]='Corrente';
-originList[BRADESCO_POUPANCA]='Poupança';
-originList[HSBC_CORRENTE]='Corrente';
-originList[HSBC_POUPANCA]='Poupança';
-originList[MANUAL]='Manual';
+jQuery('a[data-type=card]:not(:first)').each((i, e) => {
+    originList[e.attributes['data-id'].value] = 'Cartão de Crédito';
+    if (originList[e.attributes['data-bank'].value] = 'nbnk') {
+        originList[e.attributes['data-id'].value] = 'Nubank';
+    }
+});
+jQuery('a[data-type=savings]:not(:first)').each((i, e) => {
+    originList[e.attributes['data-id'].value] = 'Poupança'; 
+});
+jQuery('a[data-type=account]:not(:first)').each((i, e) => {
+    originList[e.attributes['data-id'].value] = 'Corrente'; 
+});
 
 var transactions = [];
 function convert_transactions () {
