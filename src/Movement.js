@@ -1,14 +1,44 @@
-class Movement {
+export default class Movement {
+  /**
+   * @member {*}
+   */
   id = null;
+  /**
+   * @member {Date}
+   */
   date = null;
+  /**
+   * @member {String}
+   */
   category = null;
+  /**
+   * @member {String}
+   */
   description = null;
+  /**
+   * @member {Number}
+   */
   value = null;
+  /**
+   * @member {String}
+   */
   origin = null;
 
+  /**
+   * @param {String} id
+   * @param {Date} date
+   * @param {String} category
+   * @param {String} description
+   * @param {Number} value
+   * @param {String} origin
+   */
   constructor(id, date, category, description, value, origin) {
     if (!(date instanceof Date)) {
-      throw new Error(date);
+      throw new Error("Must be a instance of Date " + date + " passed");
+    }
+
+    if (isNaN(value)) {
+      throw new Error("Value is invalid");
     }
 
     this.id = id;
@@ -40,5 +70,3 @@ class Movement {
     return this.value;
   }
 }
-
-export default Movement;

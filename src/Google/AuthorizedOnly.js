@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import GoogleAPIService from './GoogleAPIService';
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import Async from 'react-code-splitting'
 
@@ -27,18 +27,18 @@ class _AuthorizedOnly extends Component {
 
 let AuthorizedOnly = withRouter(_AuthorizedOnly);
 
-const AuthorizedOnlyAsync = ({ load, componentProps }) => (
+const AuthorizedOnlyAsync = ({load, componentProps }) => (
   <AuthorizedOnly>
-    <Async load={load} componentProps={componentProps} />
-  </AuthorizedOnly>
-);
+          <Async load={load} componentProps={componentProps} />
+        </AuthorizedOnly>
+        );
 
 AuthorizedOnlyAsync.propTypes = {
-  load: PropTypes.any,
+          load: PropTypes.any,
   componentProps: PropTypes.any,
 };
 
 export {
-  AuthorizedOnly,
-  AuthorizedOnlyAsync,
+          AuthorizedOnly,
+        AuthorizedOnlyAsync,
 }

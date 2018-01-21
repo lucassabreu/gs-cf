@@ -1,6 +1,7 @@
 /* global gapi */
 
 import promisify from './promisify';
+import Sheet from './Sheet'
 
 const PARAMS = {
   apiKey: 'AIzaSyCE9M0o3QzQzCPMoWf6WwFa9hrJ_GqfPaM',
@@ -16,6 +17,19 @@ const PARAMS = {
 };
 
 class GoogleAPIService {
+  sheets = {};
+
+  /**
+   * @param {String} id
+   * @returns {Sheet}
+   */
+  getSheet(id) {
+    if (this.sheets[id] !== undefined) {
+      return this.sheets[id];
+    }
+
+    return this.sheets[id] = new Sheet(id, this);
+  }
 
   async listFiles(nextPageToken) {
     await this.initGoogleDriveAPI()

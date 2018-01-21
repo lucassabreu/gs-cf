@@ -10,8 +10,10 @@ import Menu from './Menu'
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
-const Login = (props) => <Async load={import('./Login')} componentProps={props} />;
-const ImportScript = (props) => <Async load={import('./ImportScript')} componentProps={props} />;
+let async = (importFn) => (props) => <Async load={importFn} componentProps={props} />;
+
+const Login = async(import('./Login'));
+const ImportScript = async(import('./ImportScript'));
 
 const SheetHome = (props) => <AuthorizedOnlyAsync load={import('./SheetHome')} componentProps={props} />;
 const MonthDetail = (props) => <AuthorizedOnlyAsync load={import('./Sheet/MonthDetail')} componentProps={props} />;
