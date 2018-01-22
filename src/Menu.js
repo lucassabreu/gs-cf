@@ -8,13 +8,8 @@ const Menu = ({ location, isSignedIn, user, signOut }) => {
   let sheetId = match ? match.params.id : "";
 
   return (
-    <div className="collapse navbar-collapse" id="navbars">
+    <div className="collapse navbar-collapse justify-content-between" id="navbars">
       <ul className="navbar-nav mr-auto">
-        {isSignedIn ? null :
-          <li className="nav-item">
-            <Link className="btn nav-link" to="/login">Login</Link>
-          </li>
-        }
         {sheetId.length === 0 ? null :
           <li className="nav-item">
             <Link className="btn nav-link" to={`/sheet/${sheetId}/compare`}>Compare</Link>
@@ -23,11 +18,21 @@ const Menu = ({ location, isSignedIn, user, signOut }) => {
         <li className="nav-item">
           <Link className="btn nav-link" to="/import-script">Import Script</Link>
         </li>
-        {!isSignedIn ? null :
-          <li className="nav-item">
-            <span className="btn nav-link" onClick={signOut}>Logout</span>
-          </li>
-        }
+
+      </ul>
+      {!isSignedIn ? null :
+        <span className="navbar-brand">
+          <small style={{ marginRight: "1ex" }} className="hidden-sm">{user.name}</small>
+          <img src={user.image} width="30" height="30" className="d-inline-block align-top" alt="" />
+        </span>
+      }
+      <ul class="navbar-nav">
+        <li className="nav-item">
+          {isSignedIn ?
+            <span className="btn nav-link" onClick={signOut}>Logout</span> :
+            <Link className="btn nav-link" to="/login">Login</Link>
+          }
+        </li>
       </ul>
     </div>
   )

@@ -46,7 +46,11 @@ class GoogleAPIService {
     this._user = null;
     if (this._isSignedIn) {
       const profile = oauth.currentUser.get().getBasicProfile();
-      this._user = new User(profile.getName(), profile.getEmail());
+      this._user = new User(
+        profile.getName(),
+        profile.getEmail(),
+        profile.getImageUrl()
+      );
     }
 
     localStorage.setItem('isSignedIn', this._isSignedIn);

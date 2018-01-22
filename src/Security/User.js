@@ -2,17 +2,19 @@ export default class User {
   /**
    * @param {String} name
    * @param {String} email
+   * @param {String} image
    */
-  constructor(name, email) {
+  constructor(name, email, image) {
     this.name = name;
     this.email = email;
+    this.image = image;
   }
 
   /**
    * @returns {String}
    */
   toJSON() {
-    return JSON.stringify({ user: this.user, email: this.email })
+    return JSON.stringify({ user: this.user, email: this.email, image: this.image })
   }
 
   /**
@@ -23,6 +25,6 @@ export default class User {
     if (data === null) {
       return null;
     }
-    return new User(data.name, data.email);
+    return new User(data.name, data.email, data.image);
   }
 }
