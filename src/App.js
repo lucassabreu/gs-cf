@@ -12,10 +12,10 @@ import './App.css';
 import withUser from './Security/withUser';
 
 let withGoogleUser = withUser({
-  addListener: GoogleAPIService.addLoginListener.bind(GoogleAPIService),
-  removeListener: GoogleAPIService.removeLoginListener.bind(GoogleAPIService),
-  isSignedIn: GoogleAPIService.isSignedIn.bind(GoogleAPIService),
-  getUser: GoogleAPIService.getUser.bind(GoogleAPIService),
+  addListener: (...params) => GoogleAPIService.addLoginListener(...params),
+  removeListener: (...params) => GoogleAPIService.removeLoginListener(...params),
+  isSignedIn: (...params) => GoogleAPIService.isSignedIn(...params),
+  getUser: (...params) => GoogleAPIService.getUser(...params),
 })
 
 let GooglePrivate = withGoogleUser(Private)
