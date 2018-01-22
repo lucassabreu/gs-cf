@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import SheetAPIService from '../Google/SheetAPIService';
 import Loading from '../Loading';
 import Totals from './Totals';
 import TotalsByCategory from './TotalsByCategory';
@@ -27,10 +26,6 @@ class MonthDetail extends Component {
       month: null,
       activeTab: "movements",
     };
-
-    this.service = new SheetAPIService({
-      sheetId: this.state.sheetId,
-    });
 
     this.toogleTab = this.toogleTab.bind(this);
   }

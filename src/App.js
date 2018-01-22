@@ -10,7 +10,7 @@ import Menu from './Menu'
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import withUser from './Security/withUser';
-import withSheet from './Google/withSeet';
+import withSheet from './Google/withSheet';
 
 let withGoogleUser = withUser({
   addListener: (...params) => GoogleAPIService.addLoginListener(...params),
@@ -19,6 +19,8 @@ let withGoogleUser = withUser({
   getUser: (...params) => GoogleAPIService.getUser(...params),
 })
 
+let withGoogleSheet = withSheet((id) => GoogleAPIService.getSheet(id));
+
 let GooglePrivate = withGoogleUser(Private)
 let async = (importFn) => (props) => <Async load={importFn} componentProps={props} />;
 
@@ -26,9 +28,9 @@ const Login = withGoogleUser(async(import('./Login')));
 const WithUserMenu = withGoogleUser(Menu);
 const ImportScript = async(import('./ImportScript'));
 
-const SheetHome = withSheet(async(import('./SheetHome')));
-const MonthDetail = async(import('./Sheet/MonthDetail'));
-const MonthCompare = async(import('./Sheet/MonthCompare'));
+const SheetHome = withGoogleSheet(async(import('./SheetHome')));
+const MonthDetail = withGoogleSheet(async(import('./Sheet/MonthDetail')));
+const MonthCompare = withGoogleSheet(async(import('./Sheet/MonthCompare')));
 const Home = async(import('./Home'));
 
 const NoMatch = async(import('./NoMatch'));
