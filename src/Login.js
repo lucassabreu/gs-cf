@@ -7,7 +7,7 @@ const Login = ({ signIn, isSignedIn, location }) => {
     return <Redirect to={backTo} />
   }
 
-  return <button onClick={(event) => signIn()} className="btn btn-primary">Login</button>;
+  return <button onClick={() => signIn()} className="btn btn-primary">Login</button>;
 }
 
 export default Login
