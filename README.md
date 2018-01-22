@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ac39c7581e16412f958b252c573159a4)](https://www.codacy.com/app/lucassabreu/gs-cf?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lucassabreu/gs-cf&amp;utm_campaign=Badge_Grade)
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
