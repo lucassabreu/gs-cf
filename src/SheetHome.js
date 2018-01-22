@@ -65,8 +65,8 @@ class SheetHome extends Component {
 
     return (
       <div className="card col-12">
-        <CardBody><Totals loading={this.state.loading} movements={this.state.movements} /></CardBody>
         <CardBody>
+          <Totals loading={this.state.loading} movements={this.state.movements} />
           <MonthlyTable
             loading={this.state.loading}
             months={this.state.months}
