@@ -1,6 +1,7 @@
 /* global gapi */
 
 import promisify from './promisify';
+import User from '../Security/User';
 
 const PARAMS = {
   apiKey: 'AIzaSyCE9M0o3QzQzCPMoWf6WwFa9hrJ_GqfPaM',
@@ -16,6 +17,14 @@ const PARAMS = {
 };
 
 class GoogleAPIService {
+  _loginListeners = [];
+  _isListening = false;
+  _isSignedIn = null;
+  _user = null;
+
+  constructor() {
+    this._listenAuth = this._listenAuth.bind(this);
+  }
 
   async listFiles(nextPageToken) {
     await this.initGoogleDriveAPI()
@@ -29,12 +38,65 @@ class GoogleAPIService {
     return response.result;
   }
 
-  async listenOnIsSignedIn(cb) {
-    await this.initGoogleAPI();
-
+  _listenAuth(isSignedIn) {
     const oauth = gapi.auth2.getAuthInstance();
-    oauth.isSignedIn.listen(cb)
-    cb(oauth.isSignedIn.get())
+
+    this._isSignedIn = isSignedIn;
+
+    this._user = null;
+    if (this._isSignedIn) {
+      const profile = oauth.currentUser.get().getBasicProfile();
+      this._user = new User(profile.getName(), profile.getEmail());
+    }
+
+    localStorage.setItem('isSignedIn', this._isSignedIn);
+    localStorage.setItem('user', this._user ? this._user.toJSON() : null);
+
+    const state = {
+      isSignedIn: this._isSignedIn,
+      user: this._user,
+    };
+
+    this._loginListeners.forEach((cb) => cb(state));
+  }
+
+  /**
+   * @param {Function} callback
+   */
+  async addLoginListener(callback) {
+    if (this._loginListeners.indexOf(callback) !== -1) {
+      return;
+    }
+
+    this._loginListeners.push(callback);
+    await this.initGoogleAPI();
+  }
+
+  /**
+   * @param {Function} callback
+   */
+  removeLoginListener(callback) {
+    const index = this._loginListeners.indexOf(callback);
+    if (index === -1) {
+      return;
+    }
+
+    this._loginListeners.splice(index);
+  }
+
+  isSignedIn() {
+    if (this._isSignedIn === null) {
+      this._isSignedIn = JSON.parse(localStorage.getItem('isSignedIn'))
+    }
+
+    return this._isSignedIn;
+  }
+
+  getUser() {
+    if (this._user === null) {
+      this._user = User.fromJSON(localStorage.getItem('user'))
+    }
+    return this._user;
   }
 
   async signIn() {
@@ -64,6 +126,15 @@ class GoogleAPIService {
       onerror: r,
     }));
     await promisify(gapi.client.init(PARAMS));
+
+    if (this._isListening) {
+      return;
+    }
+
+    const oauth = gapi.auth2.getAuthInstance();
+    oauth.isSignedIn.listen(this._listenAuth)
+    this._listenAuth(oauth.isSignedIn.get())
+    this._isListening = true;
   }
 
   async loadGAPI() {

@@ -1,43 +1,13 @@
-import React, { Component } from 'react';
-import GoogleAPIService from './Google/GoogleAPIService';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 
-class Login extends Component {
-  static propTypes = {
-    history: PropTypes.shape({
-      push: PropTypes.func,
-    })
+const Login = ({ signIn, isSignedIn, location }) => {
+  if (isSignedIn) {
+    let backTo = location.state ? location.state.from : '/';
+    return <Redirect to={backTo} />
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      history: props.history,
-    };
-
-    this.signIn = this.signIn.bind(this);
-    this.listenOnSignedIn = this.listenOnSignedIn.bind(this);
-  }
-
-  componentWillMount() {
-    GoogleAPIService.listenOnIsSignedIn(this.listenOnSignedIn)
-  }
-
-  signIn() {
-    GoogleAPIService.signIn();
-  }
-
-  listenOnSignedIn(isSignedIn) {
-    if (isSignedIn === true) {
-      this.state.history.push('/')
-    }
-  }
-
-  render() {
-    return (
-      <button onClick={this.signIn} className="btn btn-primary">Login</button>
-    );
-  }
+  return <button onClick={(event) => signIn()} className="btn btn-primary">Login</button>;
 }
 
 export default Login
