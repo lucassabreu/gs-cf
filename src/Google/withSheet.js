@@ -4,7 +4,7 @@ import getDisplayName from '../getDisplayName'
 const withSheet = (getSheet) => (WrappedComponent) => {
   const WithSheet = ({ match, ...restProps }) => {
     let sheet = null;
-    if (!match.params.sheetId) {
+    if (match.params.sheetId) {
       sheet = getSheet(match.params.sheetId);
     }
 
