@@ -10,6 +10,7 @@ import Menu from './Menu'
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import withUser from './Security/withUser';
+import withSheet from './Google/withSeet';
 
 let withGoogleUser = withUser({
   addListener: (...params) => GoogleAPIService.addLoginListener(...params),
@@ -25,7 +26,7 @@ const Login = withGoogleUser(async(import('./Login')));
 const WithUserMenu = withGoogleUser(Menu);
 const ImportScript = async(import('./ImportScript'));
 
-const SheetHome = async(import('./SheetHome'));
+const SheetHome = withSheet(async(import('./SheetHome')));
 const MonthDetail = async(import('./Sheet/MonthDetail'));
 const MonthCompare = async(import('./Sheet/MonthCompare'));
 const Home = async(import('./Home'));
@@ -77,9 +78,9 @@ class App extends Component {
                     (props) => <Login signIn={this.signIn} {...props} />
                   } />
                   <Route path="/import-script" component={ImportScript} />
-                  <GooglePrivate exact path="/sheet/:id" component={SheetHome} />
-                  <GooglePrivate exact path="/sheet/:id/compare" component={MonthCompare} />
-                  <GooglePrivate exact path="/sheet/:id/:year-:month" component={MonthDetail} />
+                  <GooglePrivate exact path="/sheet/:sheetId" component={SheetHome} />
+                  <GooglePrivate exact path="/sheet/:sheetId/compare" component={MonthCompare} />
+                  <GooglePrivate exact path="/sheet/:sheetId/:year-:month" component={MonthDetail} />
                   <Route component={NoMatch} />
                 </Switch>
               </section>
