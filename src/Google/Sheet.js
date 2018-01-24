@@ -2,7 +2,7 @@
 
 import GoogleAPIService from './GoogleAPIService'
 import promisify from './promisify'
-import Movement from '../Movement'
+import Movement from '../Model/Movement'
 
 export default class Sheet {
   id = null;
@@ -16,6 +16,13 @@ export default class Sheet {
   constructor(id, googleAPIService) {
     this.id = id
     this.googleAPIService = googleAPIService
+  }
+
+  /**
+   * @returns {String}
+   */
+  getId() {
+    return this.id;
   }
 
   /**

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import SheetAPIService from './Google/SheetAPIService';
 
+import Sheet from './Google/Sheet';
 import './SheetHome.css'
 import MonthlyTable from './Sheet/MonthlyTable.js';
 import Totals from './Sheet/Totals.js';
@@ -9,27 +9,19 @@ import PropTypes from 'prop-types';
 
 class SheetHome extends Component {
   static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.any,
-    }).isRequired
+    sheet: PropTypes.instanceOf(Sheet).isRequired
   }
 
-  constructor(props, { router }) {
+  constructor(props) {
     super(props);
 
     this.state = {
-      router: router,
-      sheetId: props.match.params.id,
       error: null,
       loading: true,
       movements: [],
       months: [],
       activeTab: 'totals',
     };
-
-    this.service = new SheetAPIService({
-      sheetId: this.state.sheetId
-    });
 
     this.toogleTab = this.toogleTab.bind(this);
   }
@@ -48,8 +40,8 @@ class SheetHome extends Component {
 
   async updateMovements() {
     this.setState({
-      movements: await this.service.getMovements({}),
-      months: await this.service.getMonths({}),
+      movements: await this.props.sheet.getMovements({}),
+      months: await this.props.sheet.getMonths({}),
       loading: false,
     });
   }
@@ -67,10 +59,7 @@ class SheetHome extends Component {
       <div className="card col-12">
         <CardBody>
           <Totals loading={this.state.loading} movements={this.state.movements} />
-          <MonthlyTable
-            loading={this.state.loading}
-            months={this.state.months}
-            sheetId={this.state.sheetId} />
+          <MonthlyTable loading={this.state.loading} months={this.state.months} sheetId={this.sheet.getId()} />
         </CardBody>
       </div>
     )
