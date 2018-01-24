@@ -55,11 +55,14 @@ class SheetHome extends Component {
       return <div className="card col-12"><CardBody><Loading /></CardBody></div>
     }
 
+    const { loading, movements, months } = this.state;
+    const { sheet } = this.props;
+
     return (
       <div className="card col-12">
         <CardBody>
-          <Totals loading={this.state.loading} movements={this.state.movements} />
-          <MonthlyTable loading={this.state.loading} months={this.state.months} sheetId={this.sheet.getId()} />
+          <Totals loading={loading} movements={movements} />
+          <MonthlyTable loading={loading} months={months} sheetId={sheet.getId()} />
         </CardBody>
       </div>
     )
