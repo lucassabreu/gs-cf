@@ -158,8 +158,8 @@ export default class Sheet {
 
     if (month) {
       return months.filter(m => (
-        m.date.getFullYear() === month.getFullYear() &&
-        m.date.getMonth() === month.getMonth()
+        m.month.getFullYear() === month.getFullYear() &&
+        m.month.getMonth() === month.getMonth()
       ));
     }
 
