@@ -20,7 +20,6 @@ class MonthDetail extends Component {
     let { params } = props.match;
 
     this.state = {
-      sheetId: params.id,
       monthDate: new Date(params.year, params.month, 0),
       loading: true,
       month: null,
@@ -42,7 +41,7 @@ class MonthDetail extends Component {
     if (this.state.loading) {
       this.setState({
         loading: false,
-        month: (await this.service.getMonths({ month: this.state.monthDate })).pop(),
+        month: (await this.props.sheet.getMonths({ month: this.state.monthDate })).pop(),
       });
     }
   }
