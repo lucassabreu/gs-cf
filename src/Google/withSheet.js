@@ -8,7 +8,7 @@ const withSheet = (getSheet) => (WrappedComponent) => {
       sheet = getSheet(match.params.sheetId);
     }
 
-    return <WrappedComponent sheet={sheet} {...restProps} />
+    return <WrappedComponent sheet={sheet} match={match} {...restProps} />
   }
   WithSheet.displayName = `WithSheet(${getDisplayName(WrappedComponent)})`
   return WithSheet;
