@@ -106,7 +106,7 @@ export default class Sheet {
 
     const dateToKey = (date) => parseInt(
       date.toISOString()
-        .substring(0, 6)
+        .substring(0, 7)
         .replace(/[^0-9]/g, ''),
       10
     );
@@ -140,9 +140,15 @@ export default class Sheet {
         month.prev = months[prevIndex];
 
         return month;
-      });
+      })
+      .sort((n, p) => n.index - p.index);
 
-    return this._months = months;
+    this._months = [];
+    for (let key in months) {
+      this._months.push(months[key]);
+    }
+
+    return this._months;
   }
 
   /**
@@ -174,7 +180,7 @@ export default class Sheet {
     if (end) {
       end = new Date(end);
       end.setMonth(end.getMonth() + 1)
-      end.setDate(-1)
+      end.setDate(0)
       months = months.filter((m) => {
         return m.month <= end;
       })
