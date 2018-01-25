@@ -37,4 +37,15 @@ export default class Month {
 
     return this;
   }
+
+  /**
+   * @returns {Number}
+   */
+  getInitial() {
+    if (!this.prev) {
+      return 0;
+    }
+
+    return this.prev.balance;
+  }
 }

@@ -105,7 +105,7 @@ class Compare extends React.PureComponent {
     );
 
     let startMonthTotal = months.slice(0, 1).pop()
-    let runSum = startMonthTotal.initial;
+    let runSum = startMonthTotal.getInitial();
     data.sort(this.sortFunc).map(d => {
       runSum += d["Balanço"];
       d["Acumulado"] = runSum;

@@ -33,7 +33,6 @@ class MonthCompare extends Component {
     let today = new Date();
 
     this.state = {
-      sheetId: props.match.params.id,
       loading: STATE.NOT_LOADED,
       startDate: new Date(today.getFullYear(), today.getMonth() - 1, 1, 0, 0, 0),
       endDate: new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0),
@@ -71,8 +70,8 @@ class MonthCompare extends Component {
     };
 
     this.setState({
-      movements: await this.service.getMovements(filter),
-      months: await this.service.getMonths(filter),
+      movements: await this.props.sheet.getMovements(filter),
+      months: await this.props.sheet.getMonths(filter),
       loading: STATE.LOADED,
     })
   }
