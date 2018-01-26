@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import SheetAPIService from '../Google/SheetAPIService';
 import Loading from '../Loading';
 import Totals from './Totals';
 import TotalsByCategory from './TotalsByCategory';
@@ -21,16 +20,11 @@ class MonthDetail extends Component {
     let { params } = props.match;
 
     this.state = {
-      sheetId: params.id,
       monthDate: new Date(params.year, params.month, 0),
       loading: true,
       month: null,
       activeTab: "movements",
     };
-
-    this.service = new SheetAPIService({
-      sheetId: this.state.sheetId,
-    });
 
     this.toogleTab = this.toogleTab.bind(this);
   }
@@ -47,7 +41,7 @@ class MonthDetail extends Component {
     if (this.state.loading) {
       this.setState({
         loading: false,
-        month: (await this.service.getMonths({ month: this.state.monthDate })).pop(),
+        month: (await this.props.sheet.getMonths({ month: this.state.monthDate })).pop(),
       });
     }
   }

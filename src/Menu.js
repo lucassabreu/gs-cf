@@ -26,7 +26,7 @@ const Menu = ({ location, isSignedIn, user, signOut }) => {
           <img src={user.image} width="30" height="30" className="d-inline-block align-top" alt="" />
         </span>
       }
-      <ul class="navbar-nav">
+      <ul className="navbar-nav">
         <li className="nav-item">
           {isSignedIn ?
             <span className="btn nav-link" onClick={signOut}>Logout</span> :

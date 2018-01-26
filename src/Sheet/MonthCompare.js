@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import SheetAPIService from '../Google/SheetAPIService';
 import Loading from '../Loading';
 import Totals from './Totals';
 import CategoryTotalsByMonth from './CategoryTotalsByMonth';
@@ -34,18 +33,13 @@ class MonthCompare extends Component {
     let today = new Date();
 
     this.state = {
-      sheetId: props.match.params.id,
       loading: STATE.NOT_LOADED,
-      startDate: new Date(today.getFullYear(), today.getMonth() - 1, 1, 0, 0, 0),
+      startDate: new Date(today.getFullYear(), today.getMonth() - 3, 1, 0, 0, 0),
       endDate: new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0),
       movements: [],
       months: [],
       activeTab: "comparation",
     };
-
-    this.service = new SheetAPIService({
-      sheetId: this.state.sheetId,
-    });
 
     this.loadData = this.loadData.bind(this);
     this.toogleTab = this.toogleTab.bind(this);
@@ -76,8 +70,8 @@ class MonthCompare extends Component {
     };
 
     this.setState({
-      movements: await this.service.getMovements(filter),
-      months: await this.service.getMonths(filter),
+      movements: await this.props.sheet.getMovements(filter),
+      months: await this.props.sheet.getMonths(filter),
       loading: STATE.LOADED,
     })
   }

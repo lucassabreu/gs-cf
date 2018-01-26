@@ -1,6 +1,7 @@
 /* global gapi */
 
 import promisify from './promisify';
+import Sheet from './Sheet'
 import User from '../Security/User';
 
 const PARAMS = {
@@ -17,6 +18,7 @@ const PARAMS = {
 };
 
 class GoogleAPIService {
+  sheets = {};
   _loginListeners = [];
   _isListening = false;
   _isSignedIn = null;
@@ -24,6 +26,18 @@ class GoogleAPIService {
 
   constructor() {
     this._listenAuth = this._listenAuth.bind(this);
+  }
+
+  /**
+   * @param {String} id
+   * @returns {Sheet}
+   */
+  getSheet(id) {
+    if (this.sheets[id] !== undefined) {
+      return this.sheets[id];
+    }
+
+    return this.sheets[id] = new Sheet(id, this);
   }
 
   async listFiles(nextPageToken) {

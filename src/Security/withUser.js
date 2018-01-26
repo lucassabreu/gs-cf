@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-
-function getDisplayName(WrappedComponent) {
-  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
-}
+import getDisplayName from '../getDisplayName'
 
 export default function withUser(loginSubscriber) {
   return (WrappedComponent) => {
