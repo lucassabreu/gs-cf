@@ -12,6 +12,11 @@ const Menu = ({ location, isSignedIn, user, signOut }) => {
       <ul className="navbar-nav mr-auto">
         {sheetId.length === 0 ? null :
           <li className="nav-item">
+            <Link className="btn nav-link" to={`/sheet/${sheetId}`}>Resume</Link>
+          </li>
+        }
+        {sheetId.length === 0 ? null :
+          <li className="nav-item">
             <Link className="btn nav-link" to={`/sheet/${sheetId}/compare`}>Compare</Link>
           </li>
         }
