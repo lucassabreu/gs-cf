@@ -86,4 +86,6 @@ yarn-debug.log*
 yarn-error.log*
 
 *.orig
-package-lock.json.vscode
+package-lock.json
+.vscode
+
