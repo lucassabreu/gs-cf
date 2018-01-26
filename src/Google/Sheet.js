@@ -127,17 +127,11 @@ export default class Sheet {
         return months;
       }, [])
       .map((month, index, months) => {
-        let nextMonth = new Date(month.month);
-        nextMonth.setMonth(month.month.getMonth() + 1)
-
         let prevMonth = new Date(month.month);
-        prevMonth.setMonth(month.month.getMonth() - 1)
+        prevMonth.setDate(0)
 
-        const nextIndex = dateToKey(nextMonth);
         const prevIndex = dateToKey(prevMonth);
-
-        month.next = months[nextIndex];
-        month.prev = months[prevIndex];
+        month.setPrev(months[prevIndex]);
 
         return month;
       })

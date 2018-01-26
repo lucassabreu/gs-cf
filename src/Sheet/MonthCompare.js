@@ -34,7 +34,7 @@ class MonthCompare extends Component {
 
     this.state = {
       loading: STATE.NOT_LOADED,
-      startDate: new Date(today.getFullYear(), today.getMonth() - 1, 1, 0, 0, 0),
+      startDate: new Date(today.getFullYear(), today.getMonth() - 3, 1, 0, 0, 0),
       endDate: new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0),
       movements: [],
       months: [],

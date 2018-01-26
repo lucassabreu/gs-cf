@@ -7,6 +7,8 @@ export default class Month {
   movements = null;
   prev = null;
   next = null;
+  final = 0;
+  initial = 0;
 
   /**
    * @param {Object} param
@@ -33,19 +35,34 @@ export default class Month {
   addMovement(movement) {
     this[movement.value > 0 ? 'credit' : 'debit'] += movement.value;
     this.balance += movement.value;
+    this.final += movement.value;
     this.movements.push(movement);
 
     return this;
   }
 
   /**
-   * @returns {Number}
+   * @param {Month} [prevMonth]
+   * @return {Month}
    */
-  getInitial() {
-    if (!this.prev) {
-      return 0;
+  setPrev(prevMonth) {
+    const initial = this.initial;
+    if (this.prev) {
+      this.initial = 0;
+      this.final -= this.prev.final;
     }
 
-    return this.prev.balance;
+    this.prev = prevMonth;
+    if (prevMonth) {
+      this.initial = this.prev.final;
+      this.final += this.prev.final;
+      this.prev.next = this;
+    }
+
+    if (this.next && this.initial !== initial) {
+      this.next.setPrev(this);
+    }
+
+    return this;
   }
 }
