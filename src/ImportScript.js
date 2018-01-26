@@ -18,7 +18,7 @@ jQuery('a[data-type=card]:not(:first)').each((i, e) => {
     }
 });
 jQuery('a[data-type=savings]:not(:first)').each((i, e) => {
-    originList[e.attributes['data-id'].value] = 'Poupança'; 
+    originList[e.attributes['data-id'].value] = 'Investimo'; 
 });
 jQuery('a[data-type=account]:not(:first)').each((i, e) => {
     originList[e.attributes['data-id'].value] = 'Corrente'; 
