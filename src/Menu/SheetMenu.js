@@ -1,18 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
 import { matchPath } from 'react-router'
-
-/**
- * @param {String} url 
- * @param {String} pathname 
- */
-const equals = (url, pathname) => url === pathname;
-/**
- * @param {String} url 
- * @param {String} pathname 
- */
-const startsWith = (url, pathname) => pathname.startsWith(url);
+import ActiveLinkList, { equals, startsWith } from './ActiveLinkList'
 
 const SheetMenu = ({ location, className }) => {
   const match = matchPath(location.pathname, '/sheet/:id');
@@ -29,11 +18,7 @@ const SheetMenu = ({ location, className }) => {
 
   return (
     <ul className={`navbar-nav ${className}`}>
-      {itens.map(({ url, name, isActive }) => (
-        <li key={url} className={`nav-item ${isActive(url, location.pathname) ? 'active' : ''}`}>
-          <Link className="btn nav-link" to={url}>{name}</Link>
-        </li>
-      ))}
+      <ActiveLinkList itens={itens} pathname={location.pathname} />
     </ul>
   )
 }
