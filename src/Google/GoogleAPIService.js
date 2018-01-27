@@ -65,10 +65,13 @@ class GoogleAPIService {
         profile.getEmail(),
         profile.getImageUrl()
       );
+      localStorage.setItem('isSignedIn', this._isSignedIn);
+      localStorage.setItem('user', this._user ? this._user.toJSON() : null);
     }
 
-    localStorage.setItem('isSignedIn', this._isSignedIn);
-    localStorage.setItem('user', this._user ? this._user.toJSON() : null);
+    if (!this._isSignedIn) {
+      localStorage.clear()
+    }
 
     const state = {
       isSignedIn: this._isSignedIn,
@@ -125,6 +128,7 @@ class GoogleAPIService {
   async signOut() {
     await this.initGoogleAPI();
     gapi.auth2.getAuthInstance().signOut();
+    this._listenAuth(false)
   }
 
   async initGoogleDriveAPI() {
