@@ -21,10 +21,8 @@ export default class Logout extends Component {
 
   render() {
     if (this.state.loggedOut) {
-      console.log('logout', this.state.loggedOut);
       return <Redirect to='/login' />
     }
-    console.log('logout', this.state.loggedOut);
     return <h1>Logging out...</h1>
   }
 }
