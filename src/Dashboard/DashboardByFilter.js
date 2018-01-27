@@ -4,8 +4,6 @@ import Sheet from '../Google/Sheet'
 import { Col } from 'reactstrap';
 import Movement from '../Model/Movement';
 import BalanceCard from './BalanceCard';
-import StackGrid from 'react-stack-grid'
-import sizeMe from 'react-sizeme';
 
 class DashboardByFilter extends Component {
   constructor(props) {
@@ -92,41 +90,44 @@ class DashboardByFilter extends Component {
   }
 
   render() {
-    const { size: { width } } = this.props;
-    return (
-      <Col xs={12} >
-        <StackGrid columnWidth={width <= 500 ? '100%' : '50%'}>
-          <BalanceCard
-            key="totals"
-            loaded={this.state.loaded}
-            title="Totals"
-            dataKey="name"
-            balances={this.state.totals}
-          />
-          <BalanceCard
-            key="origins"
-            loaded={this.state.loaded}
-            title="Balances By Origin"
-            dataKey="origin"
-            balances={this.state.originBalances}
-          />
-          <BalanceCard
-            key="categoriesDebts"
-            loaded={this.state.loaded}
-            title="Balances By Debts"
-            dataKey="category"
-            balances={this.state.greaterDebtsCategoriesBalance}
-          />
-          <BalanceCard
-            key="categoriesIcomes"
-            loaded={this.state.loaded}
-            title="Balances By Incomes"
-            dataKey="category"
-            balances={this.state.greaterIncomeCategoriesBalance}
-          />
-        </StackGrid>
+    const balances = [
+      {
+        key: 'totals',
+        title: 'Totals',
+        dataKey: 'name',
+        balances: this.state.totals
+      },
+      {
+        key: 'origins',
+        title: 'Balances By Origin',
+        dataKey: 'origin',
+        balances: this.state.originBalances
+      },
+      {
+        key: 'categoriesIcomes',
+        title: 'Balances By Incomes',
+        dataKey: 'category',
+        balances: this.state.greaterIncomeCategoriesBalance
+      },
+      {
+        key: 'categoriesDebts',
+        title: 'Balances By Debts',
+        dataKey: 'category',
+        balances: this.state.greaterDebtsCategoriesBalance
+      },
+    ]
+
+    return balances.map((b) => (
+      <Col sm={6} key={b.key}>
+        <BalanceCard
+          style={{ marginBottom: '1rem' }}
+          loaded={this.state.loaded}
+          title={b.title}
+          dataKey={b.dataKey}
+          balances={b.balances}
+        />
       </Col>
-    );
+    ))
   }
 }
 
@@ -135,4 +136,4 @@ DashboardByFilter.propTypes = {
   filter: PropTypes.object,
 }
 
-export default sizeMe()(DashboardByFilter)
+export default DashboardByFilter

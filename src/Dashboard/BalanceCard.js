@@ -3,8 +3,8 @@ import { ListGroupItemText, Card, CardHeader, CardBody } from 'reactstrap';
 import Loading from '../Loading'
 import HorizontalBarChart from '../Charts/HorizontalBarChart';
 
-const BalanceCard = ({ title, balances, loaded, dataKey }) => (
-  <Card>
+const BalanceCard = ({ style, title, balances, loaded, dataKey }) => (
+  <Card style={style}>
     <CardHeader>{title}</CardHeader>
     {!loaded ? <CardBody><Loading /></CardBody> :
       <HorizontalBarChart noBorders dataKey={dataKey} value="balance"

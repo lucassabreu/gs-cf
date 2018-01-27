@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const UserMenu = ({ user, className }) => (
   <ul className={`navbar-nav ${className}`}>
     <li className="nav-item hidden-sm">
-      <span className="nav-link">{user.name}</span>
+      <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }} className="nav-link">{user.name}</span>
     </li>
     <li className="nav-item">
       <span className="nav-link" style={{ paddingBottom: 0, paddingTop: ".3rem" }}>
