@@ -43,10 +43,10 @@ export default class Movement {
 
     this.id = id;
     this.date = date;
-    this.category = category;
-    this.description = description;
+    this.category = category.trim();
+    this.description = description.trim();
     this.value = value;
-    this.origin = origin;
+    this.origin = origin.trim();
   }
 
   getMonth() {
@@ -60,7 +60,6 @@ export default class Movement {
 
   getValue() {
     if (
-      this.category === 'Pagamento de cartão' ||
       this.category === 'Resgate' ||
       this.category === 'Aplicação' ||
       this.category === 'Transferência'
