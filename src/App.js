@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import { Switch, Route, Link, withRouter } from 'react-router-dom'
+import React from 'react';
+import { Switch, Route } from 'react-router-dom'
 import Async from 'react-code-splitting'
 import GoogleAPIService from './Google/GoogleAPIService';
-import PropTypes from 'prop-types';
 import Private from './Security/Private'
+import MainLayout from './Layout/MainLayout';
 
-import Menu from './Menu'
+import withSheet from './Google/withSheet';
+import withUser from './Security/withUser';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-import withUser from './Security/withUser';
-import withSheet from './Google/withSheet';
+import Logout from './Security/Logout';
 
 let withGoogleUser = withUser({
   addListener: (...params) => GoogleAPIService.addLoginListener(...params),
@@ -18,80 +18,43 @@ let withGoogleUser = withUser({
   isSignedIn: (...params) => GoogleAPIService.isSignedIn(...params),
   getUser: (...params) => GoogleAPIService.getUser(...params),
 })
-
 let withGoogleSheet = withSheet((id) => GoogleAPIService.getSheet(id));
 
 let GooglePrivate = withGoogleUser(Private)
-let async = (importFn) => (props) => <Async load={importFn} componentProps={props} />;
+let async = (importFn, name) => {
+  const WithAsync = (props) => <Async load={importFn} componentProps={props} />
+  WithAsync.displayName = 'WithAsync' + (name ? `(${name})` : '');
+  return WithAsync
+};
 
-const Login = withGoogleUser(async(import('./Login')));
-const WithUserMenu = withGoogleUser(Menu);
-const ImportScript = async(import('./ImportScript'));
+let GoogleMainLayout = withGoogleUser(MainLayout);
 
-const SheetHome = withGoogleSheet(async(import('./SheetHome')));
-const MonthDetail = withGoogleSheet(async(import('./Sheet/MonthDetail')));
-const MonthCompare = withGoogleSheet(async(import('./Sheet/MonthCompare')));
-const Home = async(import('./Home'));
+const Login = withGoogleUser(async(import('./Security/Login'), 'Login'));
+const ImportScript = async(import('./ImportScript'), 'ImportScript');
+
+const SheetHome = withGoogleSheet(async(import('./SheetHome'), 'SheetHome'));
+const MonthDetail = withGoogleSheet(async(import('./Sheet/MonthDetail'), 'MonthDetail'));
+const MonthCompare = withGoogleSheet(async(import('./Sheet/MonthCompare'), 'MonthCompare'));
+const Home = withGoogleUser(async(import('./Home'), 'Home'));
 
 const NoMatch = async(import('./NoMatch'));
 
-class App extends Component {
-  static propTypes = {
-    history: PropTypes.shape({
-      push: PropTypes.func,
-    }),
-  }
+const App = () => (
+  <Switch>
+    <Route exact path="/login"
+      render={(props) => <Login signIn={async () => await GoogleAPIService.signIn()} {...props} />} />
+    <Route exact path="/logout"
+      render={(props) => <Logout signOut={async () => await GoogleAPIService.signOut()} {...props} />} />
 
-  constructor(props) {
-    super(props);
+    <GoogleMainLayout>
+      <Route path="/import-script" component={ImportScript} />
+      <GooglePrivate exact path="/" component={Home} />
+      <GooglePrivate exact path="/sheet/:sheetId" component={SheetHome} />
+      <GooglePrivate exact path="/sheet/:sheetId/compare" component={MonthCompare} />
+      <GooglePrivate exact path="/sheet/:sheetId/:year-:month" component={MonthDetail} />
+    </GoogleMainLayout>
+    <Route component={NoMatch} />
+  </Switch>
+);
 
-    this.signOut = this.signOut.bind(this);
-    this.signIn = this.signIn.bind(this);
-  }
-
-  async signOut() {
-    await GoogleAPIService.signOut();
-  }
-
-  async signIn() {
-    await GoogleAPIService.signIn();
-  }
-
-  render() {
-    return (
-      <div>
-        <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-          <Link to="/" className="navbar-brand">GS CF</Link>
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars"
-            aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-
-          <WithUserMenu signOut={this.signOut} />
-        </nav>
-
-        <div className="container-fluid">
-          <div className="row justify-content-center">
-            <main className="col-10 pt-3" role="main">
-              <section className="row">
-                <Switch>
-                  <GooglePrivate exact path="/" component={Home} />
-                  <Route path="/login" render={
-                    (props) => <Login signIn={this.signIn} {...props} />
-                  } />
-                  <Route path="/import-script" component={ImportScript} />
-                  <GooglePrivate exact path="/sheet/:sheetId" component={SheetHome} />
-                  <GooglePrivate exact path="/sheet/:sheetId/compare" component={MonthCompare} />
-                  <GooglePrivate exact path="/sheet/:sheetId/:year-:month" component={MonthDetail} />
-                  <Route component={NoMatch} />
-                </Switch>
-              </section>
-            </main>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-export default withRouter(App);
+export default App;

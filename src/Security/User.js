@@ -14,7 +14,7 @@ export default class User {
    * @returns {String}
    */
   toJSON() {
-    return JSON.stringify({ user: this.user, email: this.email, image: this.image })
+    return JSON.stringify({ name: this.name, email: this.email, image: this.image })
   }
 
   /**
