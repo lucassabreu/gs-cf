@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import MainContainer from '../Container/MainContainer';
 
 const Login = ({ signIn, isSignedIn, location }) => {
   if (isSignedIn) {
@@ -7,7 +8,11 @@ const Login = ({ signIn, isSignedIn, location }) => {
     return <Redirect to={backTo} />
   }
 
-  return <button onClick={() => signIn()} className="btn btn-primary">Login</button>;
+  return (
+    <MainContainer>
+      <button onClick={() => signIn()} className="btn btn-primary">Login</button>
+    </MainContainer>
+  )
 }
 
 export default Login
