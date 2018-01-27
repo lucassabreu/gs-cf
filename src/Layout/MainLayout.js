@@ -1,12 +1,11 @@
 import React from 'react';
-import Navbar from '../Menu/Navbar'
 import MainContainer from '../Container/MainContainer'
+import MenuLayout from './MenuLayout';
 
 const MainLayout = ({ children, user, isSignedIn }) => (
-  <div>
-    <Navbar user={user} isSignedIn={isSignedIn} />
+  <MenuLayout user={user} isSignedIn={isSignedIn}>
     <MainContainer>{children}</MainContainer>
-  </div>
+  </MenuLayout>
 )
 
 export default MainLayout
