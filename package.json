@@ -4,10 +4,10 @@
   "homepage": "http://gs-cf.lucassabreu.net.br/",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.0.0-beta",
+    "bootstrap": "^4.0.0",
     "highlight.js": "^9.12.0",
-    "jquery": "^3.2.1",
-    "popper.js": "^1.12.5",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.12.9",
     "react": "^16.2.0",
     "react-code-splitting": "^1.2.1",
     "react-dom": "^16.2.0",
@@ -15,7 +15,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.14",
     "react-transition-group": "^2.2.1",
-    "reactstrap": "^5.0.0-alpha.3",
+    "reactstrap": "^5.0.0-alpha.4",
     "recharts": "^1.0.0-beta.9"
   },
   "scripts": {
