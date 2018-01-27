@@ -4,13 +4,15 @@ import Async from 'react-code-splitting'
 import GoogleAPIService from './Google/GoogleAPIService';
 import Private from './Security/Private'
 import MainLayout from './Layout/MainLayout';
+import MenuLayout from './Layout/MenuLayout';
+import Login from './Security/Login';
+import Logout from './Security/Logout';
 
 import withSheet from './Google/withSheet';
 import withUser from './Security/withUser';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-import Logout from './Security/Logout';
 
 let withGoogleUser = withUser({
   addListener: (...params) => GoogleAPIService.addLoginListener(...params),
@@ -21,39 +23,43 @@ let withGoogleUser = withUser({
 let withGoogleSheet = withSheet((id) => GoogleAPIService.getSheet(id));
 
 let GooglePrivate = withGoogleUser(Private)
-let async = (importFn, name) => {
+let withAsync = (importFn, name) => {
   const WithAsync = (props) => <Async load={importFn} componentProps={props} />
   WithAsync.displayName = 'WithAsync' + (name ? `(${name})` : '');
   return WithAsync
 };
 
-let GoogleMainLayout = withGoogleUser(MainLayout);
+let renderWithLayout = (Layout) => (WrappedComponent) => (props) => <Layout><WrappedComponent {...props} /></Layout>;
+let renderWithMainLayout = renderWithLayout(withGoogleUser(MainLayout));
+let renderWithMenuLayout = renderWithLayout(withGoogleUser(MenuLayout));
 
-const Login = withGoogleUser(async(import('./Security/Login'), 'Login'));
-const ImportScript = async(import('./ImportScript'), 'ImportScript');
+const LoginWithUser = withGoogleUser(Login);
+const ImportScript = withAsync(import('./ImportScript'), 'ImportScript');
 
-const SheetHome = withGoogleSheet(async(import('./SheetHome'), 'SheetHome'));
-const MonthDetail = withGoogleSheet(async(import('./Sheet/MonthDetail'), 'MonthDetail'));
-const MonthCompare = withGoogleSheet(async(import('./Sheet/MonthCompare'), 'MonthCompare'));
-const Home = withGoogleUser(async(import('./Home'), 'Home'));
+const SheetHome = withGoogleSheet(withAsync(import('./SheetHome'), 'SheetHome'));
+const MonthDetail = withGoogleSheet(withAsync(import('./Sheet/MonthDetail'), 'MonthDetail'));
+const MonthCompare = withGoogleSheet(withAsync(import('./Sheet/MonthCompare'), 'MonthCompare'));
+const Home = withGoogleUser(withAsync(import('./Home'), 'Home'));
+const Dashboard = withGoogleSheet(withAsync(import('./Dashboard/Dashboard'), 'Dashboard'));
 
-const NoMatch = async(import('./NoMatch'));
+const NoMatch = withAsync(import('./NoMatch'));
 
 const App = () => (
   <Switch>
     <Route exact path="/login"
-      render={(props) => <Login signIn={async () => await GoogleAPIService.signIn()} {...props} />} />
+      render={(props) => <LoginWithUser signIn={async () => await GoogleAPIService.signIn()} {...props} />} />
     <Route exact path="/logout"
       render={(props) => <Logout signOut={async () => await GoogleAPIService.signOut()} {...props} />} />
 
-    <GoogleMainLayout>
-      <Route path="/import-script" component={ImportScript} />
-      <GooglePrivate exact path="/" component={Home} />
-      <GooglePrivate exact path="/sheet/:sheetId" component={SheetHome} />
-      <GooglePrivate exact path="/sheet/:sheetId/compare" component={MonthCompare} />
-      <GooglePrivate exact path="/sheet/:sheetId/:year-:month" component={MonthDetail} />
-    </GoogleMainLayout>
-    <Route component={NoMatch} />
+    <Route path="/import-script" render={renderWithMainLayout(ImportScript)} />
+    <GooglePrivate exact path="/" render={renderWithMainLayout(Home)} />
+    <GooglePrivate exact path="/sheet/:sheetId" render={renderWithMainLayout(SheetHome)} />
+    <GooglePrivate exact path="/sheet/:sheetId/compare" render={renderWithMainLayout(MonthCompare)} />
+    <GooglePrivate exact path="/sheet/:sheetId/:year-:month" render={renderWithMainLayout(MonthDetail)} />
+
+    <GooglePrivate path="/sheet/:sheetId/dashboard" render={renderWithMenuLayout(Dashboard)} />
+
+    <Route render={renderWithMainLayout(NoMatch)} />
   </Switch>
 );
 
