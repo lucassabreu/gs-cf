@@ -118,7 +118,7 @@ class DashboardByFilter extends Component {
     ]
 
     return balances.map((b) => (
-      <Col sm={6} key={b.key}>
+      <Col xs={12} sm={6} key={b.key}>
         <BalanceCard
           style={{ marginBottom: '1rem' }}
           loaded={this.state.loaded}
