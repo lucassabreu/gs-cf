@@ -1,21 +1,19 @@
 import React from 'react';
 import { ListGroupItemText, Progress, ListGroupItem, ListGroup } from 'reactstrap';
+import { getRows } from './getRows'
 
-const getByKey = (key) => (value) => value[key];
-const defaultLabel = (key) => (value) => <ListGroupItemText children={value[key]} />
-const defaultValueLabel = (valueFn) => (value) => <ListGroupItemText children={Number(valueFn(value)).toLocaleString(undefined, 2)} />
+const defaultValueLabel = ({ value }) => (
+  <ListGroupItemText children={Number(value).toLocaleString(undefined, 2)} />
+);
 
 const HorizontalBarChart = ({ noBorders, className, data, label, value, dataKey: key, valueLabel }) => {
-  const valueFn = value instanceof Function ? value : getByKey(value);
-  const labelFn = label instanceof Function ? label : defaultLabel(label);
-  const keyFn = key instanceof Function ? key : getByKey(key);
-  valueLabel = valueLabel || defaultValueLabel(valueFn)
+  valueLabel = valueLabel || defaultValueLabel
 
-  const rows = data
-    .map((v) => ({ label: labelFn(v), value: valueFn(v), key: keyFn(v), valueLabel: valueLabel(v) }))
+  const rows = getRows({ data, label, value, key, valueLabel })
     .map((row) => Object.assign(row, {
       value: Math.abs(row.value),
       positive: row.value > 0,
+      valueLabel: valueLabel(row),
     }))
   const max = rows.reduce((max, row) => row.value > max ? row.value : max, 0)
 

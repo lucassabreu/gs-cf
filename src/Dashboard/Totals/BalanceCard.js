@@ -10,7 +10,7 @@ const BalanceCard = ({ style, title, balances, loaded, dataKey }) => (
       <HorizontalBarChart noBorders dataKey={dataKey} value="balance"
         data={balances}
         label={(v) => <ListGroupItemText className="small" style={{ float: 'left' }} children={v[dataKey]} />}
-        valueLabel={(v) => (
+        valueLabel={({ data: v }) => (
           <ListGroupItemText className="small" style={{ textAlign: 'right' }}
             children={`R$ ${v.balance.toLocaleString(undefined, 2)}`} />
         )}
