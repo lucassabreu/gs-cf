@@ -3,8 +3,8 @@ import './Dashboard.css'
 import MainContainer from '../Container/MainContainer';
 import { withRouter, Switch, Route, Redirect, Link } from 'react-router-dom'
 import ActiveLinkList, { equals } from '../Menu/ActiveLinkList'
-import Resume from './Resume';
-import LastSixMonths from './LastSixMonths';
+import Resume from './Totals/Resume';
+import LastSixMonths from './Totals/LastSixMonths';
 
 const renderWithSheet = (sheet, Component) => (props) => <Component sheet={sheet} {...props} />
 

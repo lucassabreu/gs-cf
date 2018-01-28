@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Sheet from '../Google/Sheet'
+import Sheet from '../../Google/Sheet'
 import DashboardByFilter from './DashboardByFilter';
 
 let sixMonthsAgo = new Date();

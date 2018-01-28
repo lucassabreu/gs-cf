@@ -1,7 +1,7 @@
 import React from 'react'
 import { ListGroupItemText, Card, CardHeader, CardBody } from 'reactstrap';
-import Loading from '../Loading'
-import HorizontalBarChart from '../Charts/HorizontalBarChart';
+import Loading from '../../Loading'
+import HorizontalBarChart from '../../Charts/HorizontalBarChart';
 
 const BalanceCard = ({ style, title, balances, loaded, dataKey }) => (
   <Card style={style}>

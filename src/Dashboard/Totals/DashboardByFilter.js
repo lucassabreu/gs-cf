@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Sheet from '../Google/Sheet'
+import Sheet from '../../Google/Sheet'
 import { Col } from 'reactstrap';
-import Movement from '../Model/Movement';
+import Movement from '../../Model/Movement';
 import BalanceCard from './BalanceCard';
 
 class DashboardByFilter extends Component {
