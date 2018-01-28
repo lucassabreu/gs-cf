@@ -23,4 +23,6 @@ const SheetMenu = ({ location, className }) => {
   )
 }
 
+SheetMenu.defaultProps = { className: "" }
+
 export default withRouter(SheetMenu)
