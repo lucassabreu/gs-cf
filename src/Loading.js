@@ -1,7 +1,8 @@
 import React from 'react';
-export default function Loading() {
+export default function Loading({ className }) {
+  className = className || "";
   return (
-    <div className="row">
+    <div className={`row ${className}`}>
       <div className="col-12">
         <div className="progress">
           <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style={{ width: '100%' }} ></div>
