@@ -45,26 +45,28 @@ function CategoryTotalsByMonth({ movements }) {
     .sort((n, p) => Math.abs(p.value) - Math.abs(n.value));
 
   return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th>Categoria</th>
-          <th className="text-right">Valor</th>
-          <th className="text-right">Média</th>
-          <th className="text-right">Mediana</th>
-        </tr>
-      </thead>
-      <tbody>
-        {categories.map(c => (
-          <tr key={c.category}>
-            <td>{c.category}</td>
-            <td className="text-right">{formatMoney(c.value, 2, ',', '.')}</td>
-            <td className="text-right">{formatMoney(c.avg, 2, ',', '.')}</td>
-            <td className="text-right">{formatMoney(c.median, 2, ',', '.')}</td>
+    <div className="table-responsive">
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Categoria</th>
+            <th className="text-right">Valor</th>
+            <th className="text-right">Média</th>
+            <th className="text-right">Mediana</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {categories.map(c => (
+            <tr key={c.category}>
+              <td>{c.category}</td>
+              <td className="text-right">{formatMoney(c.value, 2, ',', '.')}</td>
+              <td className="text-right">{formatMoney(c.avg, 2, ',', '.')}</td>
+              <td className="text-right">{formatMoney(c.median, 2, ',', '.')}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 

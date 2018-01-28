@@ -35,21 +35,23 @@ const MovementsTable = ({ firstMonth, movements }) => {
   }
 
   return (
-    <table className="table table-sm MovementsTable">
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Categoria</th>
-          <th>Descrição</th>
-          <th className="text-right">Valor</th>
-          <th>Origem</th>
-          <th colSpan="2" className="text-right">Acumulado</th>
-        </tr>
-      </thead>
-      <tbody>
-        {movements.map(line)}
-      </tbody>
-    </table>
+    <div className="table-responsive">
+      <table className="table table-sm MovementsTable">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Categoria</th>
+            <th>Descrição</th>
+            <th className="text-right">Valor</th>
+            <th>Origem</th>
+            <th colSpan="2" className="text-right">Acumulado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {movements.map(line)}
+        </tbody>
+      </table>
+    </div>
   )
 }
 

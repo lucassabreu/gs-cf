@@ -105,7 +105,7 @@ class MonthCompare extends Component {
               <input type="month" className="form-control" id="end"
                 onChange={this.handleDateChange('endDate')} value={formatToMonth(this.state.endDate)} />
             </div>
-            <button className="btn btn-primary material-icons" onClick={this.loadData}>search</button>
+            <button className="btn btn-primary material-icons col col-sx-12" onClick={this.loadData}>search</button>
           </form>
         </div>
         {this.state.loading === STATE.LOADING ? <CardBody><Loading /></CardBody> : null}
