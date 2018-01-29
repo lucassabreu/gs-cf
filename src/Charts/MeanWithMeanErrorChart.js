@@ -8,11 +8,21 @@ import { getRows } from './getRows'
  * https://explorable.com/calculate-standard-deviation
  */
 
+/**
+ * @param {Number} values
+ * @returns {Object}
+ */
+const meanAndError = (values) => {
+  return 0;
+}
+
 const MeanWithMeanErrorChart = ({ noBorders, className, data, label, values, dataKey: key, valueLabel }) => {
   const rows = getRows({ data, label, key, value: values })
-    .map((v) => Object.assign(v, {
-
-    }))
+    .map((v) => {
+      return Object.assign(v, {
+        mean: 0,
+      })
+    })
 }
 
 MeanWithMeanErrorChart.defaultProps = {
