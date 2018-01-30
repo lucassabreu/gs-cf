@@ -4,12 +4,7 @@ import Form from './Form';
 import Month from '../../Model/Month'
 import Sheet from '../../Google/Sheet'
 import PropTypes from 'prop-types'
-
-const CardBody = ({ children }) => (
-  <div className="card col col-xs-12">
-    <div className="card-body">{children}</div>
-  </div>
-)
+import MeanWithMeanErrorChart from '../../Charts/MeanWithMeanErrorChart'
 
 class ExpectedBehavior extends Component {
   static propTypes = {
@@ -21,7 +16,8 @@ class ExpectedBehavior extends Component {
     this.state = {
       monthsToUse: 6,
       loaded: false,
-      movements: null
+      movements: null,
+      categoriesByMonth: [],
     };
     this.onMonthsChange = this.onMonthsChange.bind(this);
   }
@@ -110,6 +106,8 @@ class ExpectedBehavior extends Component {
         <Form className="justify-content-around col-12" style={{ marginBottom: '1em' }}
           enabled={this.state.loaded} months={this.state.monthsToUse} onChange={this.onMonthsChange} />
         {!this.state.loaded && <Loading className="col-12" />}
+        <MeanWithMeanErrorChart data={this.state.categoriesByMonth}
+          dataKey="category" values="values" noBorders label="category" />
       </React.Fragment>
     );
   }
