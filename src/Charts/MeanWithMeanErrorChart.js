@@ -19,7 +19,7 @@ const meanAndError = (values) => {
   }
 
   const mean = values.reduce((c, v) => c + v, 0) / values.length
-  const stdDev = Math.sqrt(values.reduce((c, v) => c + ((v - mean) ^ 2), 0) / (values.length - 1))
+  const stdDev = Math.sqrt(values.reduce((c, v) => c + Math.pow(v - mean, 2), 0) / (values.length - 1))
 
   return {
     error: stdDev / Math.sqrt(values.length),
@@ -30,26 +30,22 @@ const meanAndError = (values) => {
 const MeanWithMeanErrorChart = ({ noBorders, className, data, label, values, dataKey: key, valueLabel }) => {
   const rows = getRows({ data, label, key, value: values })
     .map(v => Object.assign(v, meanAndError(v.value)))
-    .map(v => Object.assign(v, { estimatedMax: v.mean * (1 + v.error), estimatedMin: v.mean * (1 - v.error) }))
-    .map(v => {
+    .filter(v => v.mean !== 0)
+    .map(v =>  {
       v.positive = v.mean > 0;
-      if (v.positive) {
-        return v;
-      }
-
-      v.estimatedMin *= -1;
-      v.mean *= -1;
-      v.estimatedMax *= -1;
-      return v;
-    });
+      v.mean = Math.abs(v.mean)
+      v.error = Math.abs(v.error)
+      return Object.assign(v, { estimatedMax: v.mean + v.error, estimatedMin: v.mean - v.error })
+    })
+    .sort((a, b) => a.mean < b.mean ? 1 : -1)
 
   const max = rows.reduce((c, v) => c < v.estimatedMax ? v.estimatedMax : c, 0);
 
   return (
     <ListGroup flush={noBorders} className={className}>
-      {rows.map(({ key, label, positive, valueLabel, estimatedMax, mean, estimatedMin }) => (
+      {rows.map(({ key, error, label, positive, valueLabel, estimatedMax, mean, estimatedMin }) => (
         <ListGroupItem key={key}>
-          {label} {valueLabel}
+          {label} {Number(mean).toLocaleString(undefined, 2)}
           <Progress value={estimatedMax} max={max} color={positive ? 'success' : 'danger'} />
           <Progress value={mean} max={max} color={positive ? 'success' : 'danger'} />
           <Progress value={estimatedMin} max={max} color={positive ? 'success' : 'danger'} />
