@@ -48,7 +48,8 @@ class Form extends Component {
           <label className="mb-2 col-form-label" htmlFor={`months_${this.state.counter}`}>Months to Use:</label>
         </div>
         <div className="form-group mb-2 mx-sm-3">
-          <input value={this.state.months} onChange={this.registerChange} id={`months_${this.state.counter}`} disabled={!this.props.enabled}
+          <input value={this.state.months || ""} min={2} step={1} onChange={this.registerChange}
+            id={`months_${this.state.counter}`} disabled={!this.props.enabled}
             type="number" className="form-control form-control-sm" placeholder="Enter number of months" />
         </div>
         <button disabled={!this.props.enabled} type="submit" className="btn btn-primary mb-2">Calculate</button>
