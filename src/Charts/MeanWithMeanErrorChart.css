@@ -18,7 +18,7 @@
 .BarWithError .error {
     height: 50%;
     top: 25%;
-    background: #6c757d;
+    background: #a1a8af;
     position: absolute;
     border-radius: 0.25rem;
     transition: width 0.6s ease;

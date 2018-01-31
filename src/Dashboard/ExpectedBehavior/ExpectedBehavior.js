@@ -5,6 +5,7 @@ import Month from '../../Model/Month'
 import Sheet from '../../Google/Sheet'
 import PropTypes from 'prop-types'
 import MeanWithMeanErrorChart from '../../Charts/MeanWithMeanErrorChart'
+import { Col, Card, CardHeader } from 'reactstrap';
 
 class ExpectedBehavior extends Component {
   static propTypes = {
@@ -17,9 +18,9 @@ class ExpectedBehavior extends Component {
       monthsToUse: 6,
       loaded: false,
       movements: null,
-      categoriesByMonth: [],
+      expectedCredits: [],
+      expectedDebts: [],
     };
-    this.onMonthsChange = this.onMonthsChange.bind(this);
   }
 
   componentDidMount() {
@@ -91,23 +92,39 @@ class ExpectedBehavior extends Component {
     const categoriesByMonth = Object.keys(categoriesByMonthMap).map((key) => ({
       category: key,
       values: categoriesByMonthMap[key],
+      avg: categoriesByMonthMap[key].reduce((s, c) => s + c, 0),
     }));
 
-    this.setState({ categoriesByMonth: categoriesByMonth });
-  }
-
-  onMonthsChange({ months }) {
-    this.calculate(months);
+    this.setState({
+      expectedCredits: categoriesByMonth.filter(c => c.avg > 0),
+      expectedDebts: categoriesByMonth.filter(c => c.avg <= 0),
+    });
   }
 
   render() {
     return (
       <React.Fragment>
-        <Form className="justify-content-around col-12" style={{ marginBottom: '1em' }}
-          enabled={this.state.loaded} months={this.state.monthsToUse} onChange={this.onMonthsChange} />
-        {!this.state.loaded && <Loading className="col-12" />}
-        <MeanWithMeanErrorChart className="col-6" data={this.state.categoriesByMonth}
-          dataKey="category" values="values" noBorders label="category" />
+        <Form className="justify-content-around col-12"
+          enabled={this.state.loaded} months={this.state.monthsToUse}
+          onChange={({ months }) => this.calculate(months)} />
+
+        {!this.state.loaded && <Loading style={{ margin: '1em' }} className="col-12" />}
+
+        <Col xs={6}>
+          <Card>
+            <CardHeader>Expected Credits</CardHeader>
+            <MeanWithMeanErrorChart color="success" data={this.state.expectedCredits}
+              dataKey="category" values="values" noBorders label="category" />
+          </Card>
+        </Col>
+
+        <Col xs={6}>
+          <Card>
+            <CardHeader>Expected Credits</CardHeader>
+            <MeanWithMeanErrorChart color="danger" data={this.state.expectedDebts}
+              dataKey="category" values="values" noBorders label="category" />
+          </Card>
+        </Col>
       </React.Fragment>
     );
   }

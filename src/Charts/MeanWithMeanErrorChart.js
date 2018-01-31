@@ -33,28 +33,21 @@ const meanAndError = (values) => {
  */
 const money = (value) => `R$ ${value.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`
 
-const StackedBar = ({ children }) => (
-  <div className="progress" children={children} />
-)
+const DefaultValueLabel = ({ mean, error }) => <span>{money(mean - error)} até {money(mean + error)}</span>
 
-const Bar = ({ value, className, color, min, max, ...attributes }) => (
-  <div {...attributes} role="progressbar" style={{ width: `${(value * 100) / max}%` }} aria-valuenow={value}
-    aria-valuemin={min} aria-valuemax={max} className={`progress-bar bg-${color} ${className}`} />
-)
-
-const BarWithError = ({ value, error, max, id, tooltip, className, ...attributes }) => {
+const BarWithError = ({ value, error, max, id, tooltip, className, color, ...attributes }) => {
   const tooltips = !tooltip ? null :
     <React.Fragment>
       <UncontrolledTooltip placement="top" target={`${id}_value`} children={money(value)} />
       <UncontrolledTooltip placement="top" target={`${id}_error`}>
-        {money(value - error)} até {money(value + error)}
+        <DefaultValueLabel mean={value} error={error} />
       </UncontrolledTooltip>
     </React.Fragment>;
 
   const realMax = max || (value + error)
   return (
     <div id={id} className={`BarWithError ${className}`} {...attributes}>
-      <div id={`${id}_value`} className="value" style={{ width: `${value / realMax * 100}%` }} />
+      <div id={`${id}_value`} className={`value bg-${color}`} style={{ width: `${value / realMax * 100}%` }} />
       <div id={`${id}_error`} className="error" style={{
         left: `${(value - error) / realMax * 100}%`,
         width: `${error / realMax * 100 * 2}%`,
@@ -71,23 +64,19 @@ BarWithError.propTypes = {
   id: PropTypes.string.isRequired,
   tooltip: PropTypes.bool,
   className: PropTypes.string,
+  color: PropTypes.oneOf(['success', 'info', 'danger', 'warning']),
 }
 
 BarWithError.defaultProps = {
   tooltip: false,
   className: "",
-}
-
-Bar.defaultProps = {
-  min: 0,
-  max: 100,
-  color: 'default',
-  className: '',
+  color: "success",
 }
 
 const normalizeId = (id) => id.replace(/[^a-zA-Z_:.-]/g, '_')
 
-const MeanWithMeanErrorChart = ({ id, noBorders, className, data, label, values, dataKey: key, valueLabel }) => {
+const MeanWithMeanErrorChart = ({ id, noBorders, className, data, label, values, dataKey: key, valueLabel: ValueLabel, color }) => {
+  ValueLabel = ValueLabel || DefaultValueLabel
   const rows = getRows({ data, label, key, value: values })
     .map(v => Object.assign(v, meanAndError(v.value)))
     .filter(v => v.mean !== 0)
@@ -97,28 +86,18 @@ const MeanWithMeanErrorChart = ({ id, noBorders, className, data, label, values,
       v.error = Math.abs(v.error)
       return Object.assign(v, { estimatedMax: v.mean + v.error, estimatedMin: v.mean - v.error })
     })
+    .map(v => Object.assign(v, { ValueLabel: ValueLabel(v) }))
     .sort((a, b) => a.mean < b.mean ? 1 : -1)
 
   const max = rows.reduce((c, v) => c < v.estimatedMax ? v.estimatedMax : c, 0);
 
   return (
     <ListGroup flush={noBorders} className={className}>
-      {rows.map(({ key, error, label, positive, valueLabel, estimatedMax, mean, estimatedMin }) => (
+      {rows.map(({ key, error, label, positive, ValueLabel, estimatedMax, mean, estimatedMin }) => (
         <ListGroupItem key={key}>
-          {label}
-          <BarWithError value={mean} error={error} max={max} tooltip
+          {label} {ValueLabel}
+          <BarWithError value={mean} error={error} max={max} tooltip color={color}
             id={normalizeId(`${id}_${key}`)} />
-          {/* <StackedBar>
-            <Bar id={normalizeId(`${id}_${key}_min`)} max={max} value={estimatedMin} />
-            <Bar id={normalizeId(`${id}_${key}_mean`)} max={max} value={error} color={'warning'} />
-            <Bar id={normalizeId(`${id}_${key}_max`)} max={max} value={error} color={'info'} />
-          </StackedBar>
-          <UncontrolledTooltip placement="top" target={normalizeId(`${id}_${key}_min`)}
-            children={money(estimatedMin)} />
-          <UncontrolledTooltip placement="top" target={normalizeId(`${id}_${key}_mean`)}
-            children={money(mean)} />
-          <UncontrolledTooltip placement="top" target={normalizeId(`${id}_${key}_max`)}
-            children={money(estimatedMax)} /> */}
         </ListGroupItem>
       ))}
     </ListGroup>
@@ -129,6 +108,7 @@ MeanWithMeanErrorChart.defaultProps = {
   id: "MeanWithMeanErrorChart",
   noBorders: false,
   className: "",
+  valueLabel: DefaultValueLabel,
 }
 
 MeanWithMeanErrorChart.propTypes = {
