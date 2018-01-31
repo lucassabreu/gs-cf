@@ -20,10 +20,10 @@ const SheetMenu = ({ location, className }) => {
     <ul className={`navbar-nav ${className}`}>
       <ActiveLinkList itens={itens} pathname={location.pathname} />
       <li className="nav-item">
-        <a className="btn nav-link" href={`https://docs.google.com/spreadsheets/d/${sheetId}/edit`}
+        {sheetId && <a className="btn nav-link" href={`https://docs.google.com/spreadsheets/d/${sheetId}/edit`}
           target="_blank">
           Open On Google Drive
-        </a>
+        </a>}
       </li>
     </ul>
   )
