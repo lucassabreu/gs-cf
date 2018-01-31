@@ -1,0 +1,26 @@
+.BarWithError {
+    height: 1rem;
+    background: #e9ecef;
+    width: 100%;
+    display: inline-block;
+    position: relative;
+    border-radius: 0.25rem;
+}
+
+.BarWithError .value {
+    height: 100%;
+    background: #28a745;
+    position: absolute;
+    border-radius: 0.25rem;
+    transition: width 0.6s ease;
+}
+
+.BarWithError .error {
+    height: 50%;
+    top: 25%;
+    background: #6c757d;
+    position: absolute;
+    border-radius: 0.25rem;
+    transition: width 0.6s ease;
+    transition: left 0.6s ease;
+}

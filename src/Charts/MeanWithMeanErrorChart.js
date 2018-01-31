@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { getRows } from './getRows'
 import { UncontrolledTooltip, ListGroupItemText, Progress, ListGroupItem, ListGroup } from 'reactstrap';
+import './MeanWithMeanErrorChart.css'
 
 /**
  * todo: https://explorable.com/standard-error-of-the-mean
@@ -41,6 +42,42 @@ const Bar = ({ value, className, color, min, max, ...attributes }) => (
     aria-valuemin={min} aria-valuemax={max} className={`progress-bar bg-${color} ${className}`} />
 )
 
+const BarWithError = ({ value, error, max, id, tooltip, className, ...attributes }) => {
+  const tooltips = !tooltip ? null :
+    <React.Fragment>
+      <UncontrolledTooltip placement="top" target={`${id}_value`} children={money(value)} />
+      <UncontrolledTooltip placement="top" target={`${id}_error`}>
+        {money(value - error)} até {money(value + error)}
+      </UncontrolledTooltip>
+    </React.Fragment>;
+
+  const realMax = max || (value + error)
+  return (
+    <div id={id} className={`BarWithError ${className}`} {...attributes}>
+      <div id={`${id}_value`} className="value" style={{ width: `${value / realMax * 100}%` }} />
+      <div id={`${id}_error`} className="error" style={{
+        left: `${(value - error) / realMax * 100}%`,
+        width: `${error / realMax * 100 * 2}%`,
+      }} />
+      {tooltips}
+    </div>
+  )
+}
+
+BarWithError.propTypes = {
+  value: PropTypes.number.isRequired,
+  error: PropTypes.number.isRequired,
+  max: PropTypes.number,
+  id: PropTypes.string.isRequired,
+  tooltip: PropTypes.bool,
+  className: PropTypes.string,
+}
+
+BarWithError.defaultProps = {
+  tooltip: false,
+  className: "",
+}
+
 Bar.defaultProps = {
   min: 0,
   max: 100,
@@ -68,8 +105,10 @@ const MeanWithMeanErrorChart = ({ id, noBorders, className, data, label, values,
     <ListGroup flush={noBorders} className={className}>
       {rows.map(({ key, error, label, positive, valueLabel, estimatedMax, mean, estimatedMin }) => (
         <ListGroupItem key={key}>
-          {label} {money(mean)} {money(error)}
-          <StackedBar>
+          {label}
+          <BarWithError value={mean} error={error} max={max} tooltip
+            id={normalizeId(`${id}_${key}`)} />
+          {/* <StackedBar>
             <Bar id={normalizeId(`${id}_${key}_min`)} max={max} value={estimatedMin} />
             <Bar id={normalizeId(`${id}_${key}_mean`)} max={max} value={error} color={'warning'} />
             <Bar id={normalizeId(`${id}_${key}_max`)} max={max} value={error} color={'info'} />
@@ -79,7 +118,7 @@ const MeanWithMeanErrorChart = ({ id, noBorders, className, data, label, values,
           <UncontrolledTooltip placement="top" target={normalizeId(`${id}_${key}_mean`)}
             children={money(mean)} />
           <UncontrolledTooltip placement="top" target={normalizeId(`${id}_${key}_max`)}
-            children={money(estimatedMax)} />
+            children={money(estimatedMax)} /> */}
         </ListGroupItem>
       ))}
     </ListGroup>

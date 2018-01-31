@@ -20,7 +20,7 @@ const DefaultRender = ({ name, url, active }) => (
 );
 
 const mapItem = (Component, pathname) => ({ url, isActive, ...restProps }) => (
-  <Component key={url} url={url} active={isActive(url, pathname)} {...restProps} />
+  <Component key={url} url={url} active={isActive && isActive(url, pathname)} {...restProps} />
 );
 
 const ActiveLinkList = ({ itens, pathname, render: RenderItem, ...restProps }) => (
