@@ -106,7 +106,7 @@ class ExpectedBehavior extends Component {
         <Form className="justify-content-around col-12" style={{ marginBottom: '1em' }}
           enabled={this.state.loaded} months={this.state.monthsToUse} onChange={this.onMonthsChange} />
         {!this.state.loaded && <Loading className="col-12" />}
-        <MeanWithMeanErrorChart data={this.state.categoriesByMonth}
+        <MeanWithMeanErrorChart className="col-6" data={this.state.categoriesByMonth}
           dataKey="category" values="values" noBorders label="category" />
       </React.Fragment>
     );

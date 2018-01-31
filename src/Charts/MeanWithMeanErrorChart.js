@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { getRows } from './getRows'
-import { ListGroupItemText, Progress, ListGroupItem, ListGroup } from 'reactstrap';
+import { UncontrolledTooltip, ListGroupItemText, Progress, ListGroupItem, ListGroup } from 'reactstrap';
 
 /**
  * todo: https://explorable.com/standard-error-of-the-mean
@@ -27,11 +27,34 @@ const meanAndError = (values) => {
   };
 }
 
-const MeanWithMeanErrorChart = ({ noBorders, className, data, label, values, dataKey: key, valueLabel }) => {
+/**
+ * @param {Number} value
+ */
+const money = (value) => `R$ ${value.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`
+
+const StackedBar = ({ children }) => (
+  <div className="progress" children={children} />
+)
+
+const Bar = ({ value, className, color, min, max, ...attributes }) => (
+  <div {...attributes} role="progressbar" style={{ width: `${(value * 100) / max}%` }} aria-valuenow={value}
+    aria-valuemin={min} aria-valuemax={max} className={`progress-bar bg-${color} ${className}`} />
+)
+
+Bar.defaultProps = {
+  min: 0,
+  max: 100,
+  color: 'default',
+  className: '',
+}
+
+const normalizeId = (id) => id.replace(/[^a-zA-Z_:.-]/g, '_')
+
+const MeanWithMeanErrorChart = ({ id, noBorders, className, data, label, values, dataKey: key, valueLabel }) => {
   const rows = getRows({ data, label, key, value: values })
     .map(v => Object.assign(v, meanAndError(v.value)))
     .filter(v => v.mean !== 0)
-    .map(v =>  {
+    .map(v => {
       v.positive = v.mean > 0;
       v.mean = Math.abs(v.mean)
       v.error = Math.abs(v.error)
@@ -45,11 +68,18 @@ const MeanWithMeanErrorChart = ({ noBorders, className, data, label, values, dat
     <ListGroup flush={noBorders} className={className}>
       {rows.map(({ key, error, label, positive, valueLabel, estimatedMax, mean, estimatedMin }) => (
         <ListGroupItem key={key}>
-          {label} {Number(mean).toLocaleString(undefined, 2)}
-          <Progress value={estimatedMax} max={max} color={positive ? 'success' : 'danger'} />
-          <Progress value={mean} max={max} color={positive ? 'success' : 'danger'} />
-          <Progress value={estimatedMin} max={max} color={positive ? 'success' : 'danger'} />
-
+          {label} {money(mean)} {money(error)}
+          <StackedBar>
+            <Bar id={normalizeId(`${id}_${key}_min`)} max={max} value={estimatedMin} />
+            <Bar id={normalizeId(`${id}_${key}_mean`)} max={max} value={error} color={'warning'} />
+            <Bar id={normalizeId(`${id}_${key}_max`)} max={max} value={error} color={'info'} />
+          </StackedBar>
+          <UncontrolledTooltip placement="top" target={normalizeId(`${id}_${key}_min`)}
+            children={money(estimatedMin)} />
+          <UncontrolledTooltip placement="top" target={normalizeId(`${id}_${key}_mean`)}
+            children={money(mean)} />
+          <UncontrolledTooltip placement="top" target={normalizeId(`${id}_${key}_max`)}
+            children={money(estimatedMax)} />
         </ListGroupItem>
       ))}
     </ListGroup>
@@ -57,11 +87,13 @@ const MeanWithMeanErrorChart = ({ noBorders, className, data, label, values, dat
 }
 
 MeanWithMeanErrorChart.defaultProps = {
+  id: "MeanWithMeanErrorChart",
   noBorders: false,
   className: "",
 }
 
 MeanWithMeanErrorChart.propTypes = {
+  id: PropTypes.string,
   noBorders: PropTypes.bool,
   className: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
