@@ -33,7 +33,11 @@ const meanAndError = (values) => {
  */
 const money = (value) => `R$ ${value.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`
 
-const DefaultValueLabel = ({ mean, error }) => <span>{money(mean - error)} até {money(mean + error)}</span>
+const DefaultValueLabel = ({ mean, error }) => (
+  <span className="default-value-label">
+    {money(mean - error)} até {money(mean + error)}
+  </span>
+)
 
 const BarWithError = ({ value, error, max, id, tooltip, className, color, ...attributes }) => {
   const tooltips = !tooltip ? null :
@@ -75,7 +79,7 @@ BarWithError.defaultProps = {
 
 const normalizeId = (id) => id.replace(/[^a-zA-Z_:.-]/g, '_')
 
-const MeanWithMeanErrorChart = ({ id, noBorders, className, data, label, values, dataKey: key, valueLabel: ValueLabel, color }) => {
+const MeanWithMeanErrorChart = ({ id, noBorders, className, data, label, values, dataKey: key, valueLabel: ValueLabel }) => {
   ValueLabel = ValueLabel || DefaultValueLabel
   const rows = getRows({ data, label, key, value: values })
     .map(v => Object.assign(v, meanAndError(v.value)))
@@ -90,13 +94,14 @@ const MeanWithMeanErrorChart = ({ id, noBorders, className, data, label, values,
     .sort((a, b) => a.mean < b.mean ? 1 : -1)
 
   const max = rows.reduce((c, v) => c < v.estimatedMax ? v.estimatedMax : c, 0);
+  const min = rows.reduce((c, v) => c > v.estimatedMax ? v.estimatedMax : c, max);
 
   return (
-    <ListGroup flush={noBorders} className={className}>
+    <ListGroup flush={noBorders} className={`MeanWithMeanErrorChart ${className}`}>
       {rows.map(({ key, error, label, positive, ValueLabel, estimatedMax, mean, estimatedMin }) => (
         <ListGroupItem key={key}>
           {label} {ValueLabel}
-          <BarWithError value={mean} error={error} max={max} tooltip color={color}
+          <BarWithError value={mean} error={error} max={max} tooltip color={positive ? 'success' : 'danger'}
             id={normalizeId(`${id}_${key}`)} />
         </ListGroupItem>
       ))}

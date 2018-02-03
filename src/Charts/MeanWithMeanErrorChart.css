@@ -1,25 +1,35 @@
 .BarWithError {
-    height: 1rem;
-    background: #e9ecef;
-    width: 100%;
-    display: inline-block;
-    position: relative;
-    border-radius: 0.25rem;
+  height: 1rem;
+  background: #e9ecef;
+  width: 100%;
+  display: inline-block;
+  position: relative;
+  border-radius: 0.25rem;
 }
 
 .BarWithError .value {
-    height: 100%;
-    background: #28a745;
-    position: absolute;
-    border-radius: 0.25rem;
-    transition: width 0.6s ease;
+  height: 100%;
+  background: #28a745;
+  position: absolute;
+  border-radius: 0.25rem;
+  transition: width 0.6s ease;
 }
 
 .BarWithError .error {
-    height: 50%;
-    top: 25%;
-    background: #a1a8af;
-    position: absolute;
-    border-radius: 0.25rem;
-    transition: width 0.6s ease, left 0.6s ease;
+  height: 50%;
+  top: 25%;
+  background: #a1a8af;
+  position: absolute;
+  border-radius: 0.25rem;
+  transition: width 0.6s ease, left 0.6s ease;
+}
+
+.MeanWithMeanErrorChart .list-group-item {
+  position: relative;
+}
+
+.MeanWithMeanErrorChart .default-value-label {
+  position: absolute;
+  right: 1.25rem;
+  top: 1.25rem;
 }

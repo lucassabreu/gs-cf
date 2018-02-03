@@ -20,6 +20,7 @@ class ExpectedBehavior extends Component {
       movements: null,
       expectedCredits: [],
       expectedDebts: [],
+      totals: [],
     };
   }
 
@@ -47,12 +48,27 @@ class ExpectedBehavior extends Component {
     let promices = [];
 
     promices.push(this.aggregateByCategory(months));
+    promices.push(this.aggregateByBalance(months));
 
     promices.push()
 
     await Promise.all(promices);
 
     this.setState({ loaded: true });
+  }
+
+  aggregateByBalance(months) {
+    const balances = months.map(m => m.balance);
+    const credits = months.map(m => m.credit);
+    const debts = months.map(m => m.debt);
+    console.log(debts)
+    this.setState({
+      totals: [
+        { type: 'Balance', values: balances },
+        { type: 'Credit', values: credits },
+        { type: 'Debt', values: debts },
+      ]
+    })
   }
 
   /**
@@ -108,20 +124,28 @@ class ExpectedBehavior extends Component {
           enabled={this.state.loaded} months={this.state.monthsToUse}
           onChange={({ months }) => this.calculate(months)} />
 
-        {!this.state.loaded && <Loading style={{ margin: '1em' }} className="col-12" />}
+        {!this.state.loaded && <Col sm={12} style={{ marginBottom: '1em' }}><Loading /></Col>}
 
-        <Col xs={6}>
+        <Col sm={12} style={{ marginBottom: '1em' }}>
+          <Card>
+            <CardHeader>Expected Totals</CardHeader>
+            <MeanWithMeanErrorChart data={this.state.totals}
+              dataKey="type" values="values" noBorders label="type" />
+          </Card>
+        </Col>
+
+        <Col sm={6}>
           <Card>
             <CardHeader>Expected Credits</CardHeader>
-            <MeanWithMeanErrorChart color="success" data={this.state.expectedCredits}
+            <MeanWithMeanErrorChart data={this.state.expectedCredits}
               dataKey="category" values="values" noBorders label="category" />
           </Card>
         </Col>
 
-        <Col xs={6}>
+        <Col sm={6}>
           <Card>
-            <CardHeader>Expected Credits</CardHeader>
-            <MeanWithMeanErrorChart color="danger" data={this.state.expectedDebts}
+            <CardHeader>Expected Debts</CardHeader>
+            <MeanWithMeanErrorChart data={this.state.expectedDebts}
               dataKey="category" values="values" noBorders label="category" />
           </Card>
         </Col>
