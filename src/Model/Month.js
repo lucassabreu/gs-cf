@@ -33,9 +33,9 @@ export default class Month {
    * @return {Month} this
    */
   addMovement(movement) {
-    this[movement.value > 0 ? 'credit' : 'debt'] += movement.value;
-    this.balance += movement.value;
-    this.final += movement.value;
+    this[movement.value > 0 ? 'credit' : 'debt'] += movement.getValue();
+    this.balance += movement.getValue();
+    this.final += movement.getValue();
     this.movements.push(movement);
 
     return this;
