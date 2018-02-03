@@ -3,7 +3,7 @@ export default function reduceMovements(movements) {
     (r, m) => {
       r.total += m.value;
       if (m.value < 0) {
-        r.totalDebit -= m.value;
+        r.totalDebt -= m.value;
         return r;
       }
 
@@ -11,7 +11,7 @@ export default function reduceMovements(movements) {
       return r;
     },
     {
-      totalDebit: 0,
+      totalDebt: 0,
       totalCredit: 0,
       total: 0,
     }

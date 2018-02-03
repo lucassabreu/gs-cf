@@ -22,7 +22,7 @@ function MonthlyTable({ className, loading, months, sheetId }) {
             <th>Month</th>
             <th className="text-right">Initial</th>
             <th className="text-right">Credit</th>
-            <th className="text-right">Debit</th>
+            <th className="text-right">Debt</th>
             <th className="text-right">Balance</th>
             <th className="text-right">Final</th>
             <th></th>
@@ -36,7 +36,7 @@ function MonthlyTable({ className, loading, months, sheetId }) {
                 <td>{formatDate(m.month)}</td>
                 <td className="text-right">{formatMoney(m.initial, 2, ',', '.')}</td>
                 <td className="text-right">{formatMoney(m.credit, 2, ',', '.')}</td>
-                <td className="text-right">{formatMoney(m.debit, 2, ',', '.')}</td>
+                <td className="text-right">{formatMoney(m.debt, 2, ',', '.')}</td>
                 <td className="text-right">{formatMoney(m.balance, 2, ',', '.')}</td>
                 <td className="text-right">{formatMoney(m.final, 2, ',', '.')}</td>
                 <td>

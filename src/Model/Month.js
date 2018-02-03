@@ -3,7 +3,7 @@ export default class Month {
   index = null;
   balance = null;
   credit = null;
-  debit = null;
+  debt = null;
   movements = null;
   prev = null;
   next = null;
@@ -16,15 +16,15 @@ export default class Month {
    * @param {Date} param.month
    * @param {Number} param.balance
    * @param {Number} param.credit
-   * @param {Number} param.debit
+   * @param {Number} param.debt
    * @param {Movement[]} param.movements
    */
-  constructor({ index, month, balance, credit, debit, movements }) {
+  constructor({ index, month, balance, credit, debt, movements }) {
     this.month = month;
     this.index = index;
     this.balance = balance || 0;
     this.credit = credit || 0;
-    this.debit = debit || 0;
+    this.debt = debt || 0;
     this.movements = movements || [];
   }
 
@@ -33,7 +33,7 @@ export default class Month {
    * @return {Month} this
    */
   addMovement(movement) {
-    this[movement.value > 0 ? 'credit' : 'debit'] += movement.value;
+    this[movement.value > 0 ? 'credit' : 'debt'] += movement.value;
     this.balance += movement.value;
     this.final += movement.value;
     this.movements.push(movement);

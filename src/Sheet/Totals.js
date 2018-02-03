@@ -22,7 +22,7 @@ function Totals({ loading, movements, className }) {
       <div className="col-4">
         <div className="form-group">
           <label className="col-form-label"><strong>Débitos</strong></label>
-          <div>{formatMoney(totals.totalDebit, 2, ',', '.')}</div>
+          <div>{formatMoney(totals.totalDebt, 2, ',', '.')}</div>
         </div>
       </div>
       <div className="col-4">

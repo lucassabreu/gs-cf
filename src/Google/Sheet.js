@@ -216,7 +216,7 @@ export default class Sheet {
    * @param {Date} date
    * @returns {Number}
    */
-  async getDebitAt(date) {
+  async getDebtAt(date) {
     let movements = await this.getMovements({ end: date })
     return movements
       .filter(m => m.value < 0)
